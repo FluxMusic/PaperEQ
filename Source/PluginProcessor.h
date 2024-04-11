@@ -11,6 +11,10 @@
 #include <JuceHeader.h>
 
 //==============================================================================
+struct ParameterSettings
+{
+    float gain { 0 }, freq { 750 }, q { 1 };
+};
 /**
 */
 class PaperEQAudioProcessor  : public juce::AudioProcessor
@@ -55,5 +59,13 @@ public:
 
 private:
     //==============================================================================
+    juce::AudioProcessorValueTreeState apvts;
+    
+    juce::dsp::IIR::Filter<float> leftBand, rightBand;
+    
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
+    ParameterSettings getParameterSettings(juce::AudioProcessorValueTreeState& apvts);
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessor)
 };

@@ -19,7 +19,8 @@ PaperEQAudioProcessor::PaperEQAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+apvts(*this, nullptr, "Parameters", createParameterLayout())
 #endif
 {
 }
@@ -93,8 +94,14 @@ void PaperEQAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void PaperEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    juce::dsp::ProcessSpec spec;
+    
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getTotalNumInputChannels();
+    spec.maximumBlockSize = samplesPerBlock;
+    
+    leftBand.prepare(spec);
+    rightBand.prepare(spec);
 }
 
 void PaperEQAudioProcessor::releaseResources()
@@ -143,19 +150,27 @@ void PaperEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    auto parameterSettings = getParameterSettings(apvts);
+    
+    auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(getSampleRate(),
+                                                        parameterSettings.freq,
+                                                        parameterSettings.q,
+                                                        juce::Decibels::decibelsToGain(parameterSettings.gain));
+    
+    leftBand.coefficients = peakCoefficients;
+    rightBand.coefficients = peakCoefficients;
+    
+    juce::dsp::AudioBlock<float> audioBlock(buffer);
+    
+    auto leftBlock = audioBlock.getSingleChannelBlock(0);
+    auto rightBlock = audioBlock.getSingleChannelBlock(1);
+    
+    juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
+    juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+    leftBand.process(leftContext);
+    rightBand.process(rightContext);
 }
 
 //==============================================================================
@@ -166,7 +181,8 @@ bool PaperEQAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* PaperEQAudioProcessor::createEditor()
 {
-    return new PaperEQAudioProcessorEditor (*this);
+//    return new PaperEQAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -188,4 +204,26 @@ void PaperEQAudioProcessor::setStateInformation (const void* data, int sizeInByt
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PaperEQAudioProcessor();
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout PaperEQAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("Gain", 1), "Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("Freq", 2), "Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 750.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("Q", 3), "Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    
+    return layout;
+}
+
+ParameterSettings PaperEQAudioProcessor::getParameterSettings(juce::AudioProcessorValueTreeState &apvts)
+{
+    ParameterSettings parameterSettings;
+    
+    parameterSettings.gain = apvts.getRawParameterValue("Gain")->load();
+    parameterSettings.freq = apvts.getRawParameterValue("Freq")->load();
+    parameterSettings.q = apvts.getRawParameterValue("Q")->load();
+    
+    return parameterSettings;
 }
