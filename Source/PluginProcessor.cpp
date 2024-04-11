@@ -100,8 +100,8 @@ void PaperEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     spec.numChannels = getTotalNumInputChannels();
     spec.maximumBlockSize = samplesPerBlock;
     
-    leftBand.prepare(spec);
-    rightBand.prepare(spec);
+    leftChain.prepare(spec);
+    rightChain.prepare(spec);
 }
 
 void PaperEQAudioProcessor::releaseResources()
@@ -158,8 +158,8 @@ void PaperEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
                                                         parameterSettings.q,
                                                         juce::Decibels::decibelsToGain(parameterSettings.gain));
     
-    leftBand.coefficients = peakCoefficients;
-    rightBand.coefficients = peakCoefficients;
+    leftChain.get<0>().coefficients = peakCoefficients;
+    rightChain.get<0>().coefficients = peakCoefficients;
     
     juce::dsp::AudioBlock<float> audioBlock(buffer);
     
@@ -169,8 +169,8 @@ void PaperEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
     juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
 
-    leftBand.process(leftContext);
-    rightBand.process(rightContext);
+    leftChain.process(leftContext);
+    rightChain.process(rightContext);
 }
 
 //==============================================================================

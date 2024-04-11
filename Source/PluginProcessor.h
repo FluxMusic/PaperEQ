@@ -61,7 +61,7 @@ private:
     //==============================================================================
     juce::AudioProcessorValueTreeState apvts;
     
-    juce::dsp::IIR::Filter<float> leftBand, rightBand;
+    juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> leftChain, rightChain;
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
