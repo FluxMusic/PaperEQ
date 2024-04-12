@@ -11,13 +11,37 @@
 #include <JuceHeader.h>
 
 //==============================================================================
+enum Slope
+{
+    Slope_6,
+    Slope_12,
+    Slope_24,
+    Slope_36,
+    Slope_48
+};
+
 struct ParameterSettings
 {
-    float gain { 0 }, freq { 750 }, q { 1 };
+    float lowCutFreq { 0 };
+    Slope lowCutSlope { Slope::Slope_6 };
+    float lowShelfGain { 0 }, lowShelfFreq { 200 }, lowShelfQ { 1 };
+    float peakGain { 0 }, peakFreq { 750 }, peakQ { 1 };
+    float highShelfGain { 0 }, highShelfFreq { 5000 }, highShelfQ { 1 };
+    float highCutFreq { 20000 };
+    Slope highCutSlope { Slope::Slope_6 };
+};
+
+enum ChainFilters
+{
+    LowCut,
+    LowShelf,
+    Peak,
+    HighShelf,
+    HighCut
 };
 /**
 */
-class PaperEQAudioProcessor  : public juce::AudioProcessor
+class PaperEQAudioProcessor  : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -61,11 +85,16 @@ private:
     //==============================================================================
     juce::AudioProcessorValueTreeState apvts;
     
-    juce::dsp::ProcessorChain<juce::dsp::IIR::Filter<float>> leftChain, rightChain;
+    using Filter = juce::dsp::IIR::Filter<float>;
+    using CutChain = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter, Filter>;
+    
+    juce::dsp::ProcessorChain<CutChain, Filter, Filter, Filter, CutChain> leftChain, rightChain;
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
     ParameterSettings getParameterSettings(juce::AudioProcessorValueTreeState& apvts);
+    
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessor)
 };
