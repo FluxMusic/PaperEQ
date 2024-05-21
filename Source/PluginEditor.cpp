@@ -16,6 +16,7 @@ PaperEQAudioProcessorEditor::PaperEQAudioProcessorEditor (PaperEQAudioProcessor&
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     addAndMakeVisible(responseCurveComponent);
+    addAndMakeVisible(peakBand);
     
     setSize (800, 450);
     setResizable(true, true);
@@ -53,8 +54,8 @@ void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillRect(lowShelfBounds);
     
     auto peakBounds = bounds.removeFromLeft(bounds.getWidth() / 3);
-    g.setColour(juce::Colours::yellow);
-    g.fillRect(peakBounds);
+//    g.setColour(juce::Colours::yellow);
+//    g.fillRect(peakBounds);
     
     auto highShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 2);
     g.setColour(juce::Colours::green);
@@ -77,4 +78,13 @@ void PaperEQAudioProcessorEditor::resized()
     
     auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);
     responseCurveComponent.setBounds(responseCurveBounds);
+    
+    auto lowCutBounds = bounds. removeFromLeft(bounds.getWidth() / 5);
+    
+    auto lowShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 4);
+    
+    auto peakBounds = bounds.removeFromLeft(bounds.getWidth() / 3);
+    peakBand.setBounds(peakBounds);
+    
+    auto highShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 2);
 }

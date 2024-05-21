@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "Components/ResponseCurveComponent.h"
+#include "Components/PeakBandComponent.h"
 
 //==============================================================================
 /**
@@ -31,6 +32,8 @@ private:
     PaperEQAudioProcessor& audioProcessor;
     
     ResponseCurveComponent responseCurveComponent;
+    
+    PeakBandComponent peakBand;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessorEditor)
 };
