@@ -11,9 +11,10 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "Components/ResponseCurveComponent.h"
-#include "Components/PeakBandComponent.h"
 #include "Components/LowCutBandComponent.h"
 #include "Components/LowShelfBandComponent.h"
+#include "Components/PeakBandComponent.h"
+#include "Components/HighShelfBandComponent.h"
 
 //==============================================================================
 /**
@@ -38,6 +39,7 @@ private:
     LowCutBandComponent lowCutBand;
     LowShelfBandComponent lowShelfBand;
     PeakBandComponent peakBand;
+    HighShelfBandComponent highShelfBand;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessorEditor)
 };
