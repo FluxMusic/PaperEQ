@@ -87,6 +87,8 @@ public:
     float getRMSInputLevel(const int channel);
     float getRMSOutputLevel(const int channel);
     
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getCoefficients();
+    
 private:
     //==============================================================================
     juce::AudioProcessorValueTreeState apvts;

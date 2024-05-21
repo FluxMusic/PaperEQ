@@ -12,6 +12,7 @@
 //==============================================================================
 PaperEQAudioProcessorEditor::PaperEQAudioProcessorEditor (PaperEQAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p),
+responseCurveComponent(p),
 lowCutBand(p),
 lowShelfBand(p),
 peakBand(p),

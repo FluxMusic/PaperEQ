@@ -543,3 +543,74 @@ float PaperEQAudioProcessor::getRMSOutputLevel(const int channel)
     else
         return 0;
 }
+
+juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getCoefficients()
+{
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    
+    auto parameterSettings = getParameterSettings(apvts);
+    
+    switch (parameterSettings.lowCutSlope)
+    {
+        case Slope_48:
+        {
+            if (!leftChain.get<0>().isBypassed<4>())
+            coefficients.add(leftChain.get<0>().get<4>().coefficients);
+        }
+        case Slope_36:
+        {
+            if (!leftChain.get<0>().isBypassed<3>())
+            coefficients.add(leftChain.get<0>().get<3>().coefficients);
+        }
+        case Slope_24:
+        {
+            if (!leftChain.get<0>().isBypassed<2>())
+            coefficients.add(leftChain.get<0>().get<2>().coefficients);
+        }
+        case Slope_12:
+        {
+            if (!leftChain.get<0>().isBypassed<1>())
+            coefficients.add(leftChain.get<0>().get<1>().coefficients);
+        }
+        case Slope_6:
+        {
+            if (!leftChain.get<0>().isBypassed<0>())
+            coefficients.add(leftChain.get<0>().get<0>().coefficients);
+        }
+    }
+    
+    coefficients.add(leftChain.get<1>().coefficients);
+    coefficients.add(leftChain.get<2>().coefficients);
+    coefficients.add(leftChain.get<3>().coefficients);
+    
+    switch (parameterSettings.highCutSlope)
+    {
+        case Slope_48:
+        {
+            if (!leftChain.get<4>().isBypassed<4>())
+            coefficients.add(leftChain.get<4>().get<4>().coefficients);
+        }
+        case Slope_36:
+        {
+            if (!leftChain.get<4>().isBypassed<3>())
+            coefficients.add(leftChain.get<4>().get<3>().coefficients);
+        }
+        case Slope_24:
+        {
+            if (!leftChain.get<4>().isBypassed<2>())
+            coefficients.add(leftChain.get<4>().get<2>().coefficients);
+        }
+        case Slope_12:
+        {
+            if (!leftChain.get<4>().isBypassed<1>())
+            coefficients.add(leftChain.get<4>().get<1>().coefficients);
+        }
+        case Slope_6:
+        {
+            if (!leftChain.get<4>().isBypassed<0>())
+            coefficients.add(leftChain.get<4>().get<0>().coefficients);
+        }
+    }
+    
+    return coefficients;
+}

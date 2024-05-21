@@ -11,11 +11,14 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../PluginProcessor.h"
 
 class ResponseCurveComponent : public juce::Component
 {
 public:
-    ResponseCurveComponent();
+    ResponseCurveComponent(PaperEQAudioProcessor& p);
 private:
     void paint(juce::Graphics& g) override;
+    
+    PaperEQAudioProcessor& audioProcessor;
 };
