@@ -11,16 +11,20 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "../PluginProcessor.h"
 
 class PeakBandComponent : public juce::Component
 {
 public:
-    PeakBandComponent();
+    PeakBandComponent(PaperEQAudioProcessor&);
     
 private:
     void paint (juce::Graphics& g) override;
     void resized() override;
     
+    PaperEQAudioProcessor& audioProcessor;
+    
     juce::TextButton bypassButton {"Bypass"};
     juce::Slider gainSlider, freqSlider, qSlider;
+    juce::AudioProcessorValueTreeState::SliderAttachment gainSliderAttachment, freqSliderAttachment, qSliderAttachment;
 };

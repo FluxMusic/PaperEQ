@@ -10,10 +10,14 @@
 
 #include "PeakBandComponent.h"
 
-PeakBandComponent::PeakBandComponent()
-: gainSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
+PeakBandComponent::PeakBandComponent(PaperEQAudioProcessor& p)
+: audioProcessor(p),
+gainSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
 freqSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
-qSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox)
+qSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
+gainSliderAttachment(audioProcessor.getAPVTS(), "PeakGain", gainSlider),
+freqSliderAttachment(audioProcessor.getAPVTS(), "PeakFreq", freqSlider),
+qSliderAttachment(audioProcessor.getAPVTS(), "PeakQ", qSlider)
 {
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(gainSlider);
