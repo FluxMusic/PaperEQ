@@ -25,11 +25,15 @@ void SingleMeter::paint(juce::Graphics &g)
     g.fillRoundedRectangle(bounds.removeFromBottom(fill), 5.f);
 }
 
-LevelMeter::LevelMeter(PaperEQAudioProcessor& p)
-: audioProcessor(p)
+LevelMeter::LevelMeter()
 {
     addAndMakeVisible(meterL);
     addAndMakeVisible(meterR);
+}
+
+void LevelMeter::paint(juce::Graphics& g)
+{
+    
 }
 
 void LevelMeter::resized()
@@ -38,6 +42,9 @@ void LevelMeter::resized()
     auto bounds = fullBounds;
     auto leftMeterBounds = bounds.removeFromLeft(fullBounds.getWidth() * 0.43);
     auto rightMeterBounds = bounds.removeFromRight(fullBounds.getWidth() * 0.43);
+    
+    meterL.setBounds(leftMeterBounds);
+    meterR.setBounds(rightMeterBounds);
 }
 
 void LevelMeter::setLevels(float leftChannelValue, float rightChannelValue)

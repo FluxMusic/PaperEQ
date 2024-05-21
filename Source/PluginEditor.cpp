@@ -16,16 +16,20 @@ lowCutBand(p),
 lowShelfBand(p),
 peakBand(p),
 highShelfBand(p),
-highCutBand(p)
+highCutBand(p),
+output(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     addAndMakeVisible(responseCurveComponent);
+    
     addAndMakeVisible(lowCutBand);
     addAndMakeVisible(lowShelfBand);
     addAndMakeVisible(peakBand);
     addAndMakeVisible(highShelfBand);
     addAndMakeVisible(highCutBand);
+    
+    addAndMakeVisible(output);
     
     setSize (800, 450);
     setResizable(true, true);
@@ -84,6 +88,7 @@ void PaperEQAudioProcessorEditor::resized()
     auto bounds = fullBounds;
     
     auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
+    output.setBounds(meterBounds);
     
     auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);
     responseCurveComponent.setBounds(responseCurveBounds);

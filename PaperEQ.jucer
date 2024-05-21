@@ -23,6 +23,10 @@
               file="Source/Components/LowShelfBandComponent.cpp"/>
         <FILE id="H2x7dj" name="LowShelfBandComponent.h" compile="0" resource="0"
               file="Source/Components/LowShelfBandComponent.h"/>
+        <FILE id="qxuaeg" name="OutputComponent.cpp" compile="1" resource="0"
+              file="Source/Components/OutputComponent.cpp"/>
+        <FILE id="Bbqfve" name="OutputComponent.h" compile="0" resource="0"
+              file="Source/Components/OutputComponent.h"/>
         <FILE id="egbUSt" name="PeakBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/PeakBandComponent.cpp"/>
         <FILE id="uMUvSX" name="PeakBandComponent.h" compile="0" resource="0"

@@ -16,6 +16,7 @@
 #include "Components/PeakBandComponent.h"
 #include "Components/HighShelfBandComponent.h"
 #include "Components/HighCutBandComponent.h"
+#include "Components/OutputComponent.h"
 
 //==============================================================================
 /**
@@ -42,6 +43,8 @@ private:
     PeakBandComponent peakBand;
     HighShelfBandComponent highShelfBand;
     HighCutBandComponent highCutBand;
+    
+    OutputComponent output;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessorEditor)
 };

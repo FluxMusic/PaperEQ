@@ -28,7 +28,7 @@ private:
 class LevelMeter : public juce::Component
 {
 public:
-    LevelMeter(PaperEQAudioProcessor& p);
+    LevelMeter();
     
     void paint(juce::Graphics& g) override;
     
@@ -36,7 +36,5 @@ public:
     
     void setLevels(float leftChannelValue, float rightChannelValue);
 private:
-    PaperEQAudioProcessor& audioProcessor;
-    
     SingleMeter meterL, meterR;
 };
