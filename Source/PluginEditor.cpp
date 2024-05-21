@@ -18,7 +18,9 @@ PaperEQAudioProcessorEditor::PaperEQAudioProcessorEditor (PaperEQAudioProcessor&
     addAndMakeVisible(responseCurveComponent);
     
     setSize (800, 450);
-//    setResizable(true, true);
+    setResizable(true, true);
+    setResizeLimits(800, 450, 1600, 900);
+    getConstrainer()->setFixedAspectRatio(1.78);
 }
 
 PaperEQAudioProcessorEditor::~PaperEQAudioProcessorEditor()
