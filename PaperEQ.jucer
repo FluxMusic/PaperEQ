@@ -9,6 +9,10 @@
               file="Source/Components/LowCutBandComponent.cpp"/>
         <FILE id="DmWMuy" name="LowCutBandComponent.h" compile="0" resource="0"
               file="Source/Components/LowCutBandComponent.h"/>
+        <FILE id="NEAyn0" name="LowShelfBandComponent.cpp" compile="1" resource="0"
+              file="Source/Components/LowShelfBandComponent.cpp"/>
+        <FILE id="H2x7dj" name="LowShelfBandComponent.h" compile="0" resource="0"
+              file="Source/Components/LowShelfBandComponent.h"/>
         <FILE id="egbUSt" name="PeakBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/PeakBandComponent.cpp"/>
         <FILE id="uMUvSX" name="PeakBandComponent.h" compile="0" resource="0"

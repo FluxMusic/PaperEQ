@@ -13,6 +13,7 @@
 #include "Components/ResponseCurveComponent.h"
 #include "Components/PeakBandComponent.h"
 #include "Components/LowCutBandComponent.h"
+#include "Components/LowShelfBandComponent.h"
 
 //==============================================================================
 /**
@@ -35,6 +36,7 @@ private:
     ResponseCurveComponent responseCurveComponent;
     
     LowCutBandComponent lowCutBand;
+    LowShelfBandComponent lowShelfBand;
     PeakBandComponent peakBand;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessorEditor)
