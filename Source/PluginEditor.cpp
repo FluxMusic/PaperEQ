@@ -15,7 +15,8 @@ PaperEQAudioProcessorEditor::PaperEQAudioProcessorEditor (PaperEQAudioProcessor&
 lowCutBand(p),
 lowShelfBand(p),
 peakBand(p),
-highShelfBand(p)
+highShelfBand(p),
+highCutBand(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -24,6 +25,7 @@ highShelfBand(p)
     addAndMakeVisible(lowShelfBand);
     addAndMakeVisible(peakBand);
     addAndMakeVisible(highShelfBand);
+    addAndMakeVisible(highCutBand);
     
     setSize (800, 450);
     setResizable(true, true);
@@ -97,4 +99,6 @@ void PaperEQAudioProcessorEditor::resized()
     
     auto highShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 2);
     highShelfBand.setBounds(highShelfBounds);
+    
+    highCutBand.setBounds(bounds);
 }
