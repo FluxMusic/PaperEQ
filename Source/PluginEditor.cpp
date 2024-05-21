@@ -15,6 +15,8 @@ PaperEQAudioProcessorEditor::PaperEQAudioProcessorEditor (PaperEQAudioProcessor&
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+    addAndMakeVisible(responseCurveComponent);
+    
     setSize (800, 450);
 //    setResizable(true, true);
 }
@@ -27,7 +29,7 @@ PaperEQAudioProcessorEditor::~PaperEQAudioProcessorEditor()
 void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::floralwhite);
+//    g.fillAll (juce::Colours::floralwhite);
     
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
@@ -37,8 +39,8 @@ void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillRect(meterBounds);
     
     auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);
-    g.setColour(juce::Colours::black);
-    g.fillRect(responseCurveBounds);
+//    g.setColour(juce::Colours::black);
+//    g.fillRect(responseCurveBounds);
     
     auto lowCutBounds = bounds. removeFromLeft(bounds.getWidth() / 5);
     g.setColour(juce::Colours::red);
@@ -66,6 +68,11 @@ void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
 
 void PaperEQAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    const auto fullBounds = getLocalBounds();
+    auto bounds = fullBounds;
+    
+    auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
+    
+    auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);
+    responseCurveComponent.setBounds(responseCurveBounds);
 }

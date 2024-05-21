@@ -4,6 +4,12 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="bgqB2g" name="PaperEQ">
     <GROUP id="{8E9F2B74-AAC8-6912-8E13-D0ED733D1F26}" name="Source">
+      <GROUP id="{DDBEAEB0-51B8-B27C-39EB-B82FA0E8E019}" name="Components">
+        <FILE id="TAHYBg" name="ResponseCurveComponent.cpp" compile="1" resource="0"
+              file="Source/Components/ResponseCurveComponent.cpp"/>
+        <FILE id="DzS6Pz" name="ResponseCurveComponent.h" compile="0" resource="0"
+              file="Source/Components/ResponseCurveComponent.h"/>
+      </GROUP>
       <FILE id="TbF6WR" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="TjJePv" name="PluginProcessor.h" compile="0" resource="0"
