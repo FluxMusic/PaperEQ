@@ -5,6 +5,10 @@
   <MAINGROUP id="bgqB2g" name="PaperEQ">
     <GROUP id="{8E9F2B74-AAC8-6912-8E13-D0ED733D1F26}" name="Source">
       <GROUP id="{DDBEAEB0-51B8-B27C-39EB-B82FA0E8E019}" name="Components">
+        <FILE id="AB3xyI" name="LowCutBandComponent.cpp" compile="1" resource="0"
+              file="Source/Components/LowCutBandComponent.cpp"/>
+        <FILE id="DmWMuy" name="LowCutBandComponent.h" compile="0" resource="0"
+              file="Source/Components/LowCutBandComponent.h"/>
         <FILE id="egbUSt" name="PeakBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/PeakBandComponent.cpp"/>
         <FILE id="uMUvSX" name="PeakBandComponent.h" compile="0" resource="0"
