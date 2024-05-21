@@ -29,6 +29,7 @@ struct ParameterSettings
     float highShelfGain { 0 }, highShelfFreq { 5000 }, highShelfQ { 1 };
     float highCutFreq { 20000 };
     Slope highCutSlope { Slope::Slope_6 };
+    float outputGainDB { 0 };
 };
 
 enum ChainFilters
@@ -91,6 +92,8 @@ private:
     using CutChain = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter, Filter>;
     
     juce::dsp::ProcessorChain<CutChain, Filter, Filter, Filter, CutChain> leftChain, rightChain;
+    
+    juce::dsp::Gain<float> outputGain;
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     

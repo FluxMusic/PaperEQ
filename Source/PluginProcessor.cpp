@@ -40,6 +40,8 @@ apvts(*this, nullptr, "Parameters", createParameterLayout())
     
     apvts.addParameterListener("HighCutFreq", this);
     apvts.addParameterListener("HighCutSlope", this);
+    
+    apvts.addParameterListener("OutputGain", this);
 }
 
 PaperEQAudioProcessor::~PaperEQAudioProcessor()
@@ -61,6 +63,8 @@ PaperEQAudioProcessor::~PaperEQAudioProcessor()
     
     apvts.removeParameterListener("HighCutFreq", this);
     apvts.removeParameterListener("HighCutSlope", this);
+    
+    apvts.removeParameterListener("OutputGain", this);
 }
 
 //==============================================================================
@@ -128,6 +132,8 @@ void PaperEQAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void PaperEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    auto parameterSettings = getParameterSettings(apvts);
+    
     juce::dsp::ProcessSpec spec;
     
     spec.sampleRate = sampleRate;
@@ -136,6 +142,10 @@ void PaperEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     
     leftChain.prepare(spec);
     rightChain.prepare(spec);
+    
+    outputGain.setRampDurationSeconds(0.01);
+    outputGain.setGainDecibels(parameterSettings.outputGainDB);
+    outputGain.prepare(spec);
 }
 
 void PaperEQAudioProcessor::releaseResources()
@@ -192,9 +202,13 @@ void PaperEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     
     juce::dsp::ProcessContextReplacing<float> leftContext(leftBlock);
     juce::dsp::ProcessContextReplacing<float> rightContext(rightBlock);
+    
+    juce::dsp::ProcessContextReplacing<float> stereoContext(audioBlock);
 
     leftChain.process(leftContext);
     rightChain.process(rightContext);
+    
+    outputGain.process(stereoContext);
 }
 
 //==============================================================================
@@ -392,6 +406,12 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
             }
         }
     }
+    
+    if (parameterID == "OutputGain")
+    {
+        outputGain.setGainDecibels(parameterSettings.outputGainDB);
+        std::cout << parameterSettings.outputGainDB << std::endl;
+    }
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout PaperEQAudioProcessor::createParameterLayout()
@@ -426,6 +446,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout PaperEQAudioProcessor::creat
     layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighCutFreq", 12), "High Cut Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 20000.f));
     layout.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID("HighCutSlope", 13), "High Cut Slope", stringArray, 0));
     
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("OutputGain", 14), "Output Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
+    
     return layout;
 }
 
@@ -450,6 +472,8 @@ ParameterSettings PaperEQAudioProcessor::getParameterSettings(juce::AudioProcess
     
     parameterSettings.highCutFreq = apvts.getRawParameterValue("HighCutFreq")->load();
     parameterSettings.highCutSlope = static_cast<Slope>(apvts.getRawParameterValue("HighCutSlope")->load());
+    
+    parameterSettings.outputGainDB = apvts.getRawParameterValue("OutputGain")->load();
     
     return parameterSettings;
 }
