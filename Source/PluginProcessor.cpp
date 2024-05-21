@@ -146,6 +146,18 @@ void PaperEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     outputGain.setRampDurationSeconds(0.01);
     outputGain.setGainDecibels(parameterSettings.outputGainDB);
     outputGain.prepare(spec);
+    
+    inputLevelL.reset(sampleRate, 1.0);
+    inputLevelR.reset(sampleRate, 1.0);
+    
+    inputLevelL.setCurrentAndTargetValue(-100.f);
+    inputLevelR.setCurrentAndTargetValue(-100.f);
+    
+    outputLevelL.reset(sampleRate, 1.0);
+    outputLevelR.reset(sampleRate, 1.0);
+    
+    outputLevelL.setCurrentAndTargetValue(-100.f);
+    outputLevelR.setCurrentAndTargetValue(-100.f);
 }
 
 void PaperEQAudioProcessor::releaseResources()
@@ -195,6 +207,24 @@ void PaperEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
+    const auto bufferSize = buffer.getNumSamples();
+    
+    inputLevelL.skip(bufferSize);
+    inputLevelR.skip(bufferSize);
+    
+    const auto inputRMSValueL = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, bufferSize));
+    const auto inputRMSValueR = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, bufferSize));
+    
+    if (inputRMSValueL < inputLevelL.getCurrentValue())
+        inputLevelL.setTargetValue(inputRMSValueL);
+    else
+        inputLevelL.setCurrentAndTargetValue(inputRMSValueL);
+    
+    if (inputRMSValueR < inputLevelR.getCurrentValue())
+        inputLevelR.setTargetValue(inputRMSValueR);
+    else
+        inputLevelR.setCurrentAndTargetValue(inputRMSValueR);
+
     juce::dsp::AudioBlock<float> audioBlock(buffer);
     
     auto leftBlock = audioBlock.getSingleChannelBlock(0);
@@ -209,6 +239,22 @@ void PaperEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     rightChain.process(rightContext);
     
     outputGain.process(stereoContext);
+    
+    outputLevelL.skip(bufferSize);
+    outputLevelR.skip(bufferSize);
+    
+    const auto outputRMSValueL = juce::Decibels::gainToDecibels(buffer.getRMSLevel(0, 0, bufferSize));
+    const auto outputRMSValueR = juce::Decibels::gainToDecibels(buffer.getRMSLevel(1, 0, bufferSize));
+    
+    if (outputRMSValueL < outputLevelL.getCurrentValue())
+        outputLevelL.setTargetValue(outputRMSValueL);
+    else
+        outputLevelL.setCurrentAndTargetValue(outputRMSValueL);
+    
+    if (outputRMSValueR < outputLevelR.getCurrentValue())
+        outputLevelR.setTargetValue(outputRMSValueR);
+    else
+        outputLevelR.setCurrentAndTargetValue(outputRMSValueR);
 }
 
 //==============================================================================
@@ -476,4 +522,24 @@ ParameterSettings PaperEQAudioProcessor::getParameterSettings(juce::AudioProcess
     parameterSettings.outputGainDB = apvts.getRawParameterValue("OutputGain")->load();
     
     return parameterSettings;
+}
+
+float PaperEQAudioProcessor::getRMSInputLevel(const int channel)
+{
+    if (channel == 0)
+        return inputLevelL.getCurrentValue();
+    if (channel == 1)
+        return inputLevelR.getCurrentValue();
+    else
+        return 0;
+}
+
+float PaperEQAudioProcessor::getRMSOutputLevel(const int channel)
+{
+    if (channel == 0)
+        return outputLevelL.getCurrentValue();
+    if (channel == 1)
+        return outputLevelR.getCurrentValue();
+    else
+        return 0;
 }

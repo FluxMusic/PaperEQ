@@ -84,6 +84,9 @@ public:
 
     juce::AudioProcessorValueTreeState& getAPVTS() {return apvts;}
     
+    float getRMSInputLevel(const int channel);
+    float getRMSOutputLevel(const int channel);
+    
 private:
     //==============================================================================
     juce::AudioProcessorValueTreeState apvts;
@@ -94,6 +97,9 @@ private:
     juce::dsp::ProcessorChain<CutChain, Filter, Filter, Filter, CutChain> leftChain, rightChain;
     
     juce::dsp::Gain<float> outputGain;
+    
+    juce::LinearSmoothedValue<float> inputLevelL, inputLevelR;
+    juce::LinearSmoothedValue<float> outputLevelL, outputLevelR;
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
