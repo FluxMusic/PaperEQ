@@ -28,12 +28,18 @@ qSliderAttachment(audioProcessor.getAPVTS(), "LowShelfQ", qSlider)
 void LowShelfBandComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::floralwhite);
+    
+    auto bounds = getLocalBounds().toFloat().reduced(getLocalBounds().getWidth() / 40);
+    
+    g.setColour(juce::Colours::orange);
+    g.drawRoundedRectangle(bounds, 5, bounds.getWidth() / 50);
 }
 
 void LowShelfBandComponent::resized()
 {
-    const auto fullBounds = getLocalBounds();
-    auto bounds = fullBounds;
+    auto fullBounds = getLocalBounds();
+    
+    auto bounds = fullBounds.reduced(fullBounds.getWidth() / 40);
     
     auto bypassBounds = bounds.removeFromTop(bounds.getHeight() / 5);
     bypassButton.setBounds(bypassBounds);
