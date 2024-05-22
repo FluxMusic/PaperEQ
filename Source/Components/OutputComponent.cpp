@@ -19,6 +19,11 @@ outputGainAttachment(audioProcessor.getAPVTS(), "OutputGain", outputGain)
     
     addAndMakeVisible(outputGain);
     outputGain.setSliderSnapsToMousePosition(false);
+    
+    startTimerHz(60);
+    
+    inputMeter.repaint();
+    outputMeter.repaint();
 }
 
 void OutputComponent::timerCallback()
@@ -27,8 +32,8 @@ void OutputComponent::timerCallback()
     const auto rightChannelInputValue = audioProcessor.getRMSInputLevel(1);
     inputMeter.setLevels(leftChannelInputValue, rightChannelInputValue);
     
-    const auto leftChannelOutputValue = audioProcessor.getRMSInputLevel(0);
-    const auto rightChannelOutputValue = audioProcessor.getRMSInputLevel(1);
+    const auto leftChannelOutputValue = audioProcessor.getRMSOutputLevel(0);
+    const auto rightChannelOutputValue = audioProcessor.getRMSOutputLevel(1);
     outputMeter.setLevels(leftChannelOutputValue, rightChannelOutputValue);
 }
 

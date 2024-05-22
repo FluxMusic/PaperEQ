@@ -21,7 +21,7 @@ void SingleMeter::paint(juce::Graphics &g)
     g.fillRoundedRectangle(bounds, 5.f);
     
     g.setColour(juce::Colours::black);
-    auto fill = juce::jmap(level, -100.f, 0.f, bounds.getX(), bounds.getWidth());
+    auto fill = juce::jmap(level, -60.f, 0.f, bounds.getY(), bounds.getBottom());
     g.fillRoundedRectangle(bounds.removeFromBottom(fill), 5.f);
 }
 
@@ -33,7 +33,8 @@ LevelMeter::LevelMeter()
 
 void LevelMeter::paint(juce::Graphics& g)
 {
-    
+    meterL.repaint();
+    meterR.repaint();
 }
 
 void LevelMeter::resized()
