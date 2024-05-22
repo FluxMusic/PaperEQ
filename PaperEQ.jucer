@@ -4,6 +4,12 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="bgqB2g" name="PaperEQ">
     <GROUP id="{8E9F2B74-AAC8-6912-8E13-D0ED733D1F26}" name="Source">
+      <GROUP id="{9D49ED46-0C29-2C4B-D65E-A10371609857}" name="LookAndFeel">
+        <FILE id="gTPn8g" name="PaperLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/LookAndFeel/PaperLookAndFeel.cpp"/>
+        <FILE id="Kwzwvo" name="PaperLookAndFeel.h" compile="0" resource="0"
+              file="Source/LookAndFeel/PaperLookAndFeel.h"/>
+      </GROUP>
       <GROUP id="{DDBEAEB0-51B8-B27C-39EB-B82FA0E8E019}" name="Components">
         <FILE id="PlydTx" name="HighCutBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/HighCutBandComponent.cpp"/>
@@ -27,6 +33,8 @@
               file="Source/Components/OutputComponent.cpp"/>
         <FILE id="Bbqfve" name="OutputComponent.h" compile="0" resource="0"
               file="Source/Components/OutputComponent.h"/>
+        <FILE id="wS0Zai" name="PaperKnob.cpp" compile="1" resource="0" file="Source/Components/PaperKnob.cpp"/>
+        <FILE id="d5mCrf" name="PaperKnob.h" compile="0" resource="0" file="Source/Components/PaperKnob.h"/>
         <FILE id="egbUSt" name="PeakBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/PeakBandComponent.cpp"/>
         <FILE id="uMUvSX" name="PeakBandComponent.h" compile="0" resource="0"
