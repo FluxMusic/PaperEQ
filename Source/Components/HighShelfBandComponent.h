@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "../PluginProcessor.h"
+#include "PaperKnob.h"
 
 class HighShelfBandComponent : public juce::Component
 {
@@ -25,6 +26,6 @@ private:
     PaperEQAudioProcessor& audioProcessor;
     
     juce::TextButton bypassButton {"Bypass"};
-    juce::Slider gainSlider, freqSlider, qSlider;
+    PaperKnob gainSlider, freqSlider, qSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment gainSliderAttachment, freqSliderAttachment, qSliderAttachment;
 };

@@ -12,9 +12,9 @@
 
 PeakBandComponent::PeakBandComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
-gainSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
-freqSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
-qSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
+gainSlider(*audioProcessor.getAPVTS().getParameter("PeakGain"), ""),
+freqSlider(*audioProcessor.getAPVTS().getParameter("PeakFreq"), ""),
+qSlider(*audioProcessor.getAPVTS().getParameter("PeakQ"), ""),
 gainSliderAttachment(audioProcessor.getAPVTS(), "PeakGain", gainSlider),
 freqSliderAttachment(audioProcessor.getAPVTS(), "PeakFreq", freqSlider),
 qSliderAttachment(audioProcessor.getAPVTS(), "PeakQ", qSlider)

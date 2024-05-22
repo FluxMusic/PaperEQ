@@ -12,8 +12,8 @@
 
 LowCutBandComponent::LowCutBandComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
-freqSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
-slopeSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
+freqSlider(*audioProcessor.getAPVTS().getParameter("LowCutFreq"), ""),
+slopeSlider(*audioProcessor.getAPVTS().getParameter("LowCutSlope"), ""),
 freqSliderAttachment(audioProcessor.getAPVTS(), "LowCutFreq", freqSlider),
 slopeSliderAttachment(audioProcessor.getAPVTS(), "LowCutSlope", slopeSlider)
 {

@@ -4,6 +4,9 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="bgqB2g" name="PaperEQ">
     <GROUP id="{8E9F2B74-AAC8-6912-8E13-D0ED733D1F26}" name="Source">
+      <GROUP id="{50ED0445-EC29-9DFC-CE2F-8155AE892CC5}" name="Assets">
+        <FILE id="Vi3BfQ" name="Knob.svg" compile="0" resource="1" file="Source/Assets/Knob.svg"/>
+      </GROUP>
       <GROUP id="{9D49ED46-0C29-2C4B-D65E-A10371609857}" name="LookAndFeel">
         <FILE id="gTPn8g" name="PaperLookAndFeel.cpp" compile="1" resource="0"
               file="Source/LookAndFeel/PaperLookAndFeel.cpp"/>

@@ -12,9 +12,9 @@
 
 HighShelfBandComponent::HighShelfBandComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
-gainSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
-freqSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
-qSlider(juce::Slider::SliderStyle::RotaryVerticalDrag, juce::Slider::TextEntryBoxPosition::NoTextBox),
+gainSlider(*audioProcessor.getAPVTS().getParameter("HighShelfGain"), ""),
+freqSlider(*audioProcessor.getAPVTS().getParameter("HighShelfFreq"), ""),
+qSlider(*audioProcessor.getAPVTS().getParameter("HighShelfQ"), ""),
 gainSliderAttachment(audioProcessor.getAPVTS(), "HighShelfGain", gainSlider),
 freqSliderAttachment(audioProcessor.getAPVTS(), "HighShelfFreq", freqSlider),
 qSliderAttachment(audioProcessor.getAPVTS(), "HighShelfQ", qSlider)
