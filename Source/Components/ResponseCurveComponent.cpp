@@ -17,7 +17,8 @@ ResponseCurveComponent::ResponseCurveComponent(PaperEQAudioProcessor& p)
 
 void ResponseCurveComponent::paint(juce::Graphics& g)
 {
-    const auto bounds = getLocalBounds().toFloat();
+    auto bounds = getLocalBounds().toFloat();
+    
     g.setColour(juce::Colours::floralwhite);
     g.fillRect(bounds);
     
@@ -47,6 +48,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
         auto lineX = left + width * juce::mapFromLog10(line, 20.f, 20000.f);
         g.drawVerticalLine(lineX, top, bottom);
     }
+    g.drawVerticalLine(width - 1, top, bottom);
     
     for (auto line : gainLines)
     {
@@ -54,8 +56,8 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
         line == 0 ? g.setColour(juce::Colours::grey) : g.setColour(juce::Colours::grey.withAlpha(0.5f));
         g.drawHorizontalLine(lineY, left, width);
     }
+    g.drawHorizontalLine(bottom - 1, left, width);
     
-    //TODO: get coefficients, draw response curve
     const auto sampleRate = audioProcessor.getSampleRate();
     
     std::vector<float> lineMagnitudes;
@@ -64,7 +66,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
     
     const auto coefficients = audioProcessor.getCoefficients();
     
-    for (int i = 0; i < width; ++i)
+    for (int i = 0; i <= width; ++i)
     {
         float lineMagnitude = 1.f;
         
@@ -82,7 +84,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
         
     fillMagnitudes.resize(width);
     
-    for (int i = 0; i < width; ++i)
+    for (int i = 0; i <= width; ++i)
     {
         float fillMagnitude = 1.f;
         
@@ -114,7 +116,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
     {
         responseCurve.lineTo(left + i, map(lineMagnitudes[i]));
     }
-    for (size_t i = 1; i < fillMagnitudes.size(); ++i)
+    for (size_t i = 0; i < fillMagnitudes.size(); ++i)
     {
         responseCurveFill.lineTo(left + i, map(fillMagnitudes[i]));
     }

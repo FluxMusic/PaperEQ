@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "Components/ResponseCurveComponent.h"
+#include "Components/ResponseCurveDisplay.h"
 #include "Components/LowCutBandComponent.h"
 #include "Components/LowShelfBandComponent.h"
 #include "Components/PeakBandComponent.h"
@@ -36,7 +36,7 @@ private:
     // access the processor object that created it.
     PaperEQAudioProcessor& audioProcessor;
     
-    ResponseCurveComponent responseCurveComponent;
+    ResponseCurveDisplay responseCurveDisplay;
     
     LowCutBandComponent lowCutBand;
     LowShelfBandComponent lowShelfBand;

@@ -46,6 +46,10 @@
               file="Source/Components/ResponseCurveComponent.cpp"/>
         <FILE id="DzS6Pz" name="ResponseCurveComponent.h" compile="0" resource="0"
               file="Source/Components/ResponseCurveComponent.h"/>
+        <FILE id="VUqx3p" name="ResponseCurveDisplay.cpp" compile="1" resource="0"
+              file="Source/Components/ResponseCurveDisplay.cpp"/>
+        <FILE id="mGsb1P" name="ResponseCurveDisplay.h" compile="0" resource="0"
+              file="Source/Components/ResponseCurveDisplay.h"/>
       </GROUP>
       <FILE id="TbF6WR" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
