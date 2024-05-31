@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "../PluginProcessor.h"
 #include "LevelMeter.h"
+#include "PaperOutputGainSlider.h"
 
 class OutputComponent : public juce::Component, public juce::Timer
 {
@@ -30,6 +31,6 @@ private:
     
     LevelMeter inputMeter, outputMeter;
     
-    juce::Slider outputGain {juce::Slider::SliderStyle::LinearVertical, juce::Slider::TextEntryBoxPosition::NoTextBox};
+    PaperOutputGainSlider outputGain;
     juce::AudioProcessorValueTreeState::SliderAttachment outputGainAttachment;
 };

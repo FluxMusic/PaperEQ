@@ -6,6 +6,12 @@
     <GROUP id="{8E9F2B74-AAC8-6912-8E13-D0ED733D1F26}" name="Source">
       <GROUP id="{50ED0445-EC29-9DFC-CE2F-8155AE892CC5}" name="Assets">
         <FILE id="Vi3BfQ" name="Knob.svg" compile="0" resource="1" file="Source/Assets/Knob.svg"/>
+        <FILE id="EnE6W2" name="OutputGainSlider1.svg" compile="0" resource="1"
+              file="Source/Assets/OutputGainSlider1.svg"/>
+        <FILE id="tikqB7" name="OutputGainSlider2.svg" compile="0" resource="1"
+              file="Source/Assets/OutputGainSlider2.svg"/>
+        <FILE id="CXW0wZ" name="OutputGainSliderKnob.svg" compile="0" resource="1"
+              file="Source/Assets/OutputGainSliderKnob.svg"/>
       </GROUP>
       <GROUP id="{9D49ED46-0C29-2C4B-D65E-A10371609857}" name="LookAndFeel">
         <FILE id="gTPn8g" name="PaperLookAndFeel.cpp" compile="1" resource="0"
@@ -38,6 +44,10 @@
               file="Source/Components/OutputComponent.h"/>
         <FILE id="wS0Zai" name="PaperKnob.cpp" compile="1" resource="0" file="Source/Components/PaperKnob.cpp"/>
         <FILE id="d5mCrf" name="PaperKnob.h" compile="0" resource="0" file="Source/Components/PaperKnob.h"/>
+        <FILE id="rvTJVV" name="PaperOutputGainSlider.cpp" compile="1" resource="0"
+              file="Source/Components/PaperOutputGainSlider.cpp"/>
+        <FILE id="fjfIjL" name="PaperOutputGainSlider.h" compile="0" resource="0"
+              file="Source/Components/PaperOutputGainSlider.h"/>
         <FILE id="egbUSt" name="PeakBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/PeakBandComponent.cpp"/>
         <FILE id="uMUvSX" name="PeakBandComponent.h" compile="0" resource="0"

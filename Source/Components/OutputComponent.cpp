@@ -12,6 +12,7 @@
 
 OutputComponent::OutputComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
+outputGain(*audioProcessor.getAPVTS().getParameter("OutputGain")),
 outputGainAttachment(audioProcessor.getAPVTS(), "OutputGain", outputGain)
 {
     addAndMakeVisible(inputMeter);
@@ -45,10 +46,14 @@ void OutputComponent::paint(juce::Graphics& g)
 void OutputComponent::resized()
 {
     auto bounds = getLocalBounds();
-    auto inputMeterBounds = bounds.removeFromLeft(bounds.getWidth() / 3);
-    auto outputMeterBounds = bounds.removeFromRight(bounds.getWidth() / 2);
+    auto inputMeterBounds = bounds.removeFromLeft(bounds.getWidth() / 4);
+    auto outputMeterBounds = bounds.removeFromRight(bounds.getWidth() / 3);
     
     inputMeter.setBounds(inputMeterBounds);
     outputMeter.setBounds(outputMeterBounds);
+    
+    auto space = bounds.getWidth() / 20;
+    bounds.removeFromLeft(space);
+    bounds.removeFromRight(space);
     outputGain.setBounds(bounds);
 }

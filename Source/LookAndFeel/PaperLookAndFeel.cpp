@@ -43,38 +43,38 @@ void PaperLookAndFeel::drawRotarySlider(juce::Graphics& g,
     }
 }
 
-//void PaperLookAndFeel::drawLinearSlider(juce::Graphics& g,
-//                                        int x,
-//                                        int y,
-//                                        int width,
-//                                        int height,
-//                                        float sliderPos,
-//                                        float minSliderPos,
-//                                        float maxSliderPos,
-//                                        juce::Slider::SliderStyle,
-//                                        juce::Slider& slider)
-//{
-//    const auto bounds = juce::Rectangle<int>(x, y, width, height);
-//    
-//    const auto size = juce::jmin(width, height) / 1.3;
-//    
-//    auto knobBounds = juce::Rectangle<int>(size, size);
-//    knobBounds.setX(sliderPos - size / 2);
-//    knobBounds.setY((bounds.getCentreY() - size / 2) - size / 20);
-//    
-//    if (const auto slider = juce::XmlDocument::parse(BinaryData::DryWetSlider_svg))
-//    {
-//        const auto drawable = juce::Drawable::createFromSVG(*slider);
-//        drawable->setTransformToFit(bounds.toFloat(), juce::RectanglePlacement::centred);
-//        drawable->draw(g, 1.f);
-//    }
-//    
-//    if (const auto sliderKnob = juce::XmlDocument::parse(BinaryData::DryWetSliderKnob_svg))
-//    {
-//        const auto drawable = juce::Drawable::createFromSVG(*sliderKnob);
-//        g.setColour(juce::Colours::floralwhite);
-//        g.fillEllipse(knobBounds.reduced(size / 20).toFloat());
-//        drawable->setTransformToFit(knobBounds.toFloat(), juce::RectanglePlacement::centred);
-//        drawable->draw(g, 1.f);
-//    }
-//}
+void PaperLookAndFeel::drawLinearSlider(juce::Graphics& g,
+                                        int x,
+                                        int y,
+                                        int width,
+                                        int height,
+                                        float sliderPos,
+                                        float minSliderPos,
+                                        float maxSliderPos,
+                                        juce::Slider::SliderStyle,
+                                        juce::Slider& slider)
+{
+    const auto bounds = juce::Rectangle<int>(x, y, width, height);
+    
+    const auto size = juce::jmin(width, height) / 2.2;
+    
+    auto knobBounds = juce::Rectangle<int>(size, size * 1.5);
+    knobBounds.setX(bounds.getCentreX() - size / 2);
+    knobBounds.setY(sliderPos - (size * 1.5) / 2);
+    
+    if (const auto slider = juce::XmlDocument::parse(BinaryData::OutputGainSlider1_svg))
+    {
+        const auto drawable = juce::Drawable::createFromSVG(*slider);
+        drawable->setTransformToFit(bounds.toFloat(), juce::RectanglePlacement::stretchToFit);
+        drawable->draw(g, 1.f);
+    }
+    
+    if (const auto sliderKnob = juce::XmlDocument::parse(BinaryData::OutputGainSliderKnob_svg))
+    {
+        const auto drawable = juce::Drawable::createFromSVG(*sliderKnob);
+        g.setColour(juce::Colours::floralwhite);
+        g.fillRect(knobBounds);
+        drawable->setTransformToFit(knobBounds.toFloat(), juce::RectanglePlacement::stretchToFit);
+        drawable->draw(g, 1.f);
+    }
+}
