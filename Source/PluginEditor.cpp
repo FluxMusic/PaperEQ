@@ -46,14 +46,16 @@ PaperEQAudioProcessorEditor::~PaperEQAudioProcessorEditor()
 void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-//    g.fillAll (juce::Colours::floralwhite);
+    g.fillAll (juce::Colours::floralwhite);
     
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
     
     auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
-    g.setColour(juce::Colours::purple);
-    g.fillRect(meterBounds);
+//    g.setColour(juce::Colours::purple);
+//    g.fillRect(meterBounds);
+    
+    auto labelBounds = meterBounds.removeFromTop(fullBounds.getHeight() / 12);
     
     auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);
 //    g.setColour(juce::Colours::black);
@@ -78,9 +80,9 @@ void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
     g.setColour(juce::Colours::blue);
     g.fillRect(bounds);
 
-//    g.setColour (juce::Colours::black);
-//    g.setFont (15.0f);
-//    g.drawFittedText ("Paper EQ", getLocalBounds(), juce::Justification::centred, 1);
+    g.setColour (juce::Colours::black);
+    g.setFont (25.0f);
+    g.drawFittedText ("Paper EQ", labelBounds, juce::Justification::centred, 1);
 }
 
 void PaperEQAudioProcessorEditor::resized()
@@ -89,6 +91,10 @@ void PaperEQAudioProcessorEditor::resized()
     auto bounds = fullBounds;
     
     auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
+    meterBounds.removeFromTop(fullBounds.getHeight() / 12);
+    meterBounds.removeFromBottom(fullBounds.getHeight() / 10);
+    meterBounds.removeFromLeft(fullBounds.getWidth() / 50);
+    meterBounds.removeFromRight(fullBounds.getWidth() / 50);
     output.setBounds(meterBounds);
     
     auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);

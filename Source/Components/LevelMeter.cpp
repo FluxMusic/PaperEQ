@@ -35,12 +35,28 @@ void LevelMeter::paint(juce::Graphics& g)
 {
     meterL.repaint();
     meterR.repaint();
+    
+    juce::String text = juce::String::formatted("%.1f", oldLevel);
+    
+    auto newLevel = getPeakLevel();
+    
+    if (newLevel > oldLevel || newLevel < -40.f)
+    {
+        text = juce::String::formatted("%.1f", newLevel);
+        oldLevel = newLevel;
+    }
+
+    const auto textBounds = getLocalBounds().removeFromBottom(getLocalBounds().getHeight() / 18);
+    g.setColour(juce::Colours::black);
+    
+    g.drawText(text, textBounds, juce::Justification::centred);
 }
 
 void LevelMeter::resized()
 {
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
+    bounds.removeFromBottom(bounds.getHeight() / 18);
     auto leftMeterBounds = bounds.removeFromLeft(fullBounds.getWidth() * 0.43);
     auto rightMeterBounds = bounds.removeFromRight(fullBounds.getWidth() * 0.43);
     
@@ -52,4 +68,9 @@ void LevelMeter::setLevels(float leftChannelValue, float rightChannelValue)
 {
     meterL.setLevel(leftChannelValue);
     meterR.setLevel(rightChannelValue);
+}
+
+float LevelMeter::getPeakLevel()
+{
+    return juce::jmax(meterL.getLevel(), meterR.getLevel());
 }

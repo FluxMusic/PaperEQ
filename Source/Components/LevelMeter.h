@@ -21,6 +21,8 @@ public:
     void paint(juce::Graphics& g) override;
     
     void setLevel(float value) { level = value; }
+    
+    float getLevel() { return level; }
 private:
     float level { -100.f };
 };
@@ -35,6 +37,10 @@ public:
     void resized() override;
     
     void setLevels(float leftChannelValue, float rightChannelValue);
+    
+    float getPeakLevel();
 private:
     SingleMeter meterL, meterR;
+    
+    float oldLevel { -100.f };
 };
