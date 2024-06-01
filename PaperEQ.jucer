@@ -52,6 +52,10 @@
               file="Source/Components/PeakBandComponent.cpp"/>
         <FILE id="uMUvSX" name="PeakBandComponent.h" compile="0" resource="0"
               file="Source/Components/PeakBandComponent.h"/>
+        <FILE id="C6eQae" name="PeakResetButton.cpp" compile="1" resource="0"
+              file="Source/Components/PeakResetButton.cpp"/>
+        <FILE id="IetICs" name="PeakResetButton.h" compile="0" resource="0"
+              file="Source/Components/PeakResetButton.h"/>
         <FILE id="TAHYBg" name="ResponseCurveComponent.cpp" compile="1" resource="0"
               file="Source/Components/ResponseCurveComponent.cpp"/>
         <FILE id="DzS6Pz" name="ResponseCurveComponent.h" compile="0" resource="0"

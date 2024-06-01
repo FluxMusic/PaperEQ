@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "../PluginProcessor.h"
+#include "PeakResetButton.h"
 
 class SingleMeter : public juce::Component
 {
@@ -46,7 +47,7 @@ private:
     
     float oldLevel { -100.f };
     
-    juce::TextButton peakDB { "-Inf" };
+    PeakResetButton peakDB { "-Inf" };
     
     juce::Label rmsDB { "-Inf" };
 };

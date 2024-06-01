@@ -68,11 +68,13 @@ void LevelMeter::paint(juce::Graphics& g)
     {
         scaleBounds.removeFromRight(scaleBounds.getWidth() / 2);
         displayBounds = scaleBounds.removeFromLeft(scaleBounds.getWidth() / 1.5);
+        peakDB.setJustification(false);
     }
     else
     {
         scaleBounds.removeFromLeft(scaleBounds.getWidth() / 2);
         displayBounds = scaleBounds.removeFromRight(scaleBounds.getWidth() / 1.5);
+        peakDB.setJustification(true);
     }
     
     auto left = scaleBounds.getX();

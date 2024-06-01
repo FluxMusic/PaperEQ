@@ -78,3 +78,11 @@ void PaperLookAndFeel::drawLinearSlider(juce::Graphics& g,
         drawable->draw(g, 1.f);
     }
 }
+void PaperLookAndFeel::drawButtonBackground(juce::Graphics& g,
+                                            juce::Button &,
+                                            const juce::Colour &backgroundColour,
+                                            bool shouldDrawButtonAsHighlighted,
+                                            bool shouldDrawButtonAsDown)
+{
+    g.fillAll(backgroundColour);
+}
