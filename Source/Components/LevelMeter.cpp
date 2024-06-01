@@ -25,10 +25,27 @@ void SingleMeter::paint(juce::Graphics &g)
     g.fillRoundedRectangle(bounds.removeFromBottom(fill), 5.f);
 }
 
-LevelMeter::LevelMeter()
+LevelMeter::LevelMeter(bool gainScaleLeft)
+: gainScaleLeft(gainScaleLeft)
 {
     addAndMakeVisible(meterL);
     addAndMakeVisible(meterR);
+    
+    addAndMakeVisible(peakDB);
+    peakDB.setColour(juce::TextButton::ColourIds::textColourOnId, juce::Colours::black);
+    peakDB.setColour(juce::TextButton::ColourIds::textColourOffId, juce::Colours::black);
+    peakDB.setColour(juce::TextButton::ColourIds::buttonColourId, juce::Colours::floralwhite);
+    peakDB.setColour(juce::TextButton::ColourIds::buttonOnColourId, juce::Colours::floralwhite);
+    
+    peakDB.onClick = [this]()
+    {
+        oldLevel = -100.f;
+        peakDB.setButtonText("-Inf");
+    };
+    
+    addAndMakeVisible(rmsDB);
+    rmsDB.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
+    rmsDB.setJustificationType(juce::Justification::centred);
 }
 
 void LevelMeter::paint(juce::Graphics& g)
@@ -36,32 +53,118 @@ void LevelMeter::paint(juce::Graphics& g)
     meterL.repaint();
     meterR.repaint();
     
+    const auto fullBounds = getLocalBounds();
+    auto bounds = fullBounds;
+    auto scaleBounds = bounds;
+    
+    g.setColour(juce::Colours::blue);
+    
+    scaleBounds.removeFromBottom(scaleBounds.getHeight() / 18);
+    scaleBounds.removeFromTop(scaleBounds.getHeight() / 15);
+    
+    auto displayBounds = scaleBounds;
+    
+    if (gainScaleLeft)
+    {
+        scaleBounds.removeFromRight(scaleBounds.getWidth() / 2);
+        displayBounds = scaleBounds.removeFromLeft(scaleBounds.getWidth() / 1.5);
+    }
+    else
+    {
+        scaleBounds.removeFromLeft(scaleBounds.getWidth() / 2);
+        displayBounds = scaleBounds.removeFromRight(scaleBounds.getWidth() / 1.5);
+    }
+    
+    auto left = scaleBounds.getX();
+    auto right = left + scaleBounds.getWidth();
+    auto top = scaleBounds.getY();
+    auto bottom = scaleBounds.getBottom();
+    
+    const auto fontHeight = displayBounds.getWidth() / 2;
+    
+    juce::Array<float> rmsDisplay
+    {
+        -100.f, -60.f, -40.f, -30.f, -20.f, -12.f, -6.f, -3.f, 0.f
+    };
+    
+    g.setColour(juce::Colours::grey.withAlpha(0.5f));
+    
+    g.setFont(fontHeight);
+    
+    for (auto rms : rmsDisplay)
+    {
+        auto lineY = juce::jmap(rms, 0.f, -100.f, static_cast<float>(top), static_cast<float>(bottom));
+        if (gainScaleLeft)
+        {
+            g.drawHorizontalLine(lineY, left + (right - left) / 5, right - (right - left) / 5);
+            
+            auto text = juce::String::formatted("%.0f", rms);
+            
+            juce::Rectangle<int> r(displayBounds.getWidth(), fontHeight);
+            r.setCentre(displayBounds.getCentreX(), lineY);
+            r.setX(displayBounds.getX());
+            
+            g.drawFittedText(text, r, juce::Justification::right, 1);
+        }
+        else
+        {
+            g.drawHorizontalLine(lineY, left + (right - left) / 5, right - (right - left) / 5);
+            
+            auto text = juce::String::formatted("%.0f", rms);
+            
+            juce::Rectangle<int> r(displayBounds.getWidth(), fontHeight);
+            r.setCentre(displayBounds.getCentreX(), lineY);
+            r.setX(displayBounds.getX());
+            
+            g.drawFittedText(text, r, juce::Justification::left, 1);
+        }
+    }
+    
     juce::String text = juce::String::formatted("%.1f", oldLevel);
     
     auto newLevel = getPeakLevel();
     
-    if (newLevel > oldLevel || newLevel < -40.f)
+    rmsDB.setText(juce::String::formatted("%.1f", newLevel), juce::dontSendNotification);
+    
+    if (newLevel == -100.f)
     {
-        text = juce::String::formatted("%.1f", newLevel);
+        rmsDB.setText("-Inf", juce::dontSendNotification);
+    }
+    
+    if (newLevel > oldLevel)
+    {
+        peakDB.setButtonText(juce::String::formatted("%.1f", newLevel));
         oldLevel = newLevel;
     }
-
-    const auto textBounds = getLocalBounds().removeFromBottom(getLocalBounds().getHeight() / 18);
-    g.setColour(juce::Colours::black);
-    
-    g.drawText(text, textBounds, juce::Justification::centred);
 }
 
 void LevelMeter::resized()
 {
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
-    bounds.removeFromBottom(bounds.getHeight() / 18);
-    auto leftMeterBounds = bounds.removeFromLeft(fullBounds.getWidth() * 0.43);
-    auto rightMeterBounds = bounds.removeFromRight(fullBounds.getWidth() * 0.43);
+    
+    if (gainScaleLeft)
+    {
+        bounds.removeFromLeft(bounds.getWidth() / 2);
+    }
+    else
+    {
+        bounds.removeFromRight(bounds.getRight() / 2);
+    }
+    
+    auto levelBounds = bounds.removeFromBottom(bounds.getHeight() / 18);
+    auto peakBounds = bounds.removeFromTop(bounds.getHeight() / 15);
+    
+    auto halfBounds = bounds.getWidth() / 2.2;
+    
+    auto leftMeterBounds = bounds.removeFromLeft(halfBounds);
+    auto rightMeterBounds = bounds.removeFromRight(halfBounds);
     
     meterL.setBounds(leftMeterBounds);
     meterR.setBounds(rightMeterBounds);
+    
+    peakDB.setBounds(peakBounds);
+    rmsDB.setBounds(levelBounds);
 }
 
 void LevelMeter::setLevels(float leftChannelValue, float rightChannelValue)

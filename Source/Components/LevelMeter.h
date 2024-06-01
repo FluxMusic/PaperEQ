@@ -30,7 +30,7 @@ private:
 class LevelMeter : public juce::Component
 {
 public:
-    LevelMeter();
+    LevelMeter(bool gainScaleLeft);
     
     void paint(juce::Graphics& g) override;
     
@@ -42,5 +42,11 @@ public:
 private:
     SingleMeter meterL, meterR;
     
+    bool gainScaleLeft;
+    
     float oldLevel { -100.f };
+    
+    juce::TextButton peakDB { "-Inf" };
+    
+    juce::Label rmsDB { "-Inf" };
 };

@@ -29,6 +29,7 @@ void PaperOutputGainSlider::paint(juce::Graphics& g)
     auto bounds = getLocalBounds().toDouble();
     
     auto labelBounds = bounds.removeFromBottom(bounds.getHeight() / 18);
+    bounds.removeFromTop(bounds.getHeight() / 15);
     
     textBox.setBounds(labelBounds.toNearestInt());
     textBox.setJustificationType(juce::Justification::centred);
@@ -42,8 +43,8 @@ void PaperOutputGainSlider::paint(juce::Graphics& g)
     
     const auto range = getRange();
     
-    const auto minSliderPos = bounds.getHeight() - bounds.getHeight() / 13.5;
-    const auto maxSliderPos = bounds.getY() + bounds.getHeight() / 13;
+    const auto minSliderPos = bounds.getHeight();
+    const auto maxSliderPos = bounds.getY() + bounds.getHeight() / 15;
     
     setMouseDragSensitivity(minSliderPos - maxSliderPos);
     
