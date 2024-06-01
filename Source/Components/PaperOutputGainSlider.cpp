@@ -42,7 +42,7 @@ void PaperOutputGainSlider::paint(juce::Graphics& g)
     auto font = juce::Font(labelBounds.getHeight() / 1.6);
     
     textBox.setFont(font);
-    textBox.setColour(juce::Label::ColourIds::backgroundColourId, juce::Colours::floralwhite);
+    textBox.setColour(juce::Label::ColourIds::backgroundColourId, juce::Colours::floralwhite.withBrightness(0.95));
     textBox.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     
     const auto range = getRange();

@@ -17,10 +17,10 @@ SingleMeter::SingleMeter()
 void SingleMeter::paint(juce::Graphics &g)
 {
     auto bounds = getLocalBounds().toFloat();
-    g.setColour(juce::Colours::grey);
+    g.setColour(juce::Colours::grey.withAlpha(0.6f));
     g.fillRoundedRectangle(bounds, 5.f);
     
-    g.setColour(juce::Colours::black);
+    g.setColour(juce::Colours::black.withAlpha(0.8f));
     auto fill = juce::jmap(level, -60.f, 0.f, bounds.getY(), bounds.getBottom());
     g.fillRoundedRectangle(bounds.removeFromBottom(fill), 5.f);
 }
@@ -58,8 +58,6 @@ void LevelMeter::paint(juce::Graphics& g)
     auto levelBounds = bounds.removeFromBottom(bounds.getHeight() / 18);
     auto scaleBounds = bounds;
     
-    g.setColour(juce::Colours::blue);
-    
     scaleBounds.removeFromTop(scaleBounds.getHeight() / 15);
     
     auto displayBounds = scaleBounds;
@@ -89,7 +87,7 @@ void LevelMeter::paint(juce::Graphics& g)
         -100.f, -60.f, -40.f, -30.f, -20.f, -12.f, -6.f, -3.f, 0.f
     };
     
-    g.setColour(juce::Colours::grey.withAlpha(0.5f));
+    g.setColour(juce::Colours::grey.withAlpha(0.8f));
     
     g.setFont(fontHeight);
     

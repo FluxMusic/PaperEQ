@@ -50,35 +50,29 @@ void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
     
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
+    auto meterBounds = bounds;
     
-    auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
-//    g.setColour(juce::Colours::purple);
-//    g.fillRect(meterBounds);
+    const auto reduced = bounds.getHeight() / 30;
     
-    auto labelBounds = meterBounds.removeFromTop(fullBounds.getHeight() / 12);
+    g.setColour(juce::Colours::floralwhite.withBrightness(0.95));
+    meterBounds = meterBounds.removeFromRight(meterBounds.getWidth() / 4);
+    meterBounds.removeFromTop(reduced / 2);
+    meterBounds.removeFromRight(reduced / 2);
+    meterBounds.removeFromBottom(reduced / 2);
+    g.fillRect(meterBounds);
+
+    g.setColour(juce::Colours::black);
+    g.drawRoundedRectangle(bounds.reduced(bounds.getHeight() / 60).toFloat(), 5.f, bounds.getHeight() / 150);
+
+    meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
+    meterBounds.removeFromRight(reduced);
     
-    auto responseCurveBounds = bounds.removeFromTop(bounds.getHeight() / 1.7);
-//    g.setColour(juce::Colours::black);
-//    g.fillRect(responseCurveBounds);
+    bounds.removeFromTop(reduced);
+    bounds.removeFromBottom(reduced);
+    bounds.removeFromLeft(reduced);
+    bounds.removeFromRight(reduced);
     
-    auto lowCutBounds = bounds. removeFromLeft(bounds.getWidth() / 5);
-    g.setColour(juce::Colours::red);
-    g.fillRect(lowCutBounds);
-    
-    auto lowShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 4);
-    g.setColour(juce::Colours::orange);
-    g.fillRect(lowShelfBounds);
-    
-    auto peakBounds = bounds.removeFromLeft(bounds.getWidth() / 3);
-//    g.setColour(juce::Colours::yellow);
-//    g.fillRect(peakBounds);
-    
-    auto highShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 2);
-//    g.setColour(juce::Colours::green);
-//    g.fillRect(highShelfBounds);
-    
-//    g.setColour(juce::Colours::blue);
-//    g.fillRect(bounds);
+    auto labelBounds = meterBounds.removeFromTop(fullBounds.getHeight() / 9);
 
     g.setColour (juce::Colours::black);
     g.setFont (labelBounds.getHeight() / 1.5);
@@ -89,6 +83,13 @@ void PaperEQAudioProcessorEditor::resized()
 {
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
+    
+    const auto reduced = bounds.getHeight() / 30;
+    
+    bounds.removeFromTop(reduced);
+    bounds.removeFromBottom(reduced);
+    bounds.removeFromLeft(reduced);
+    bounds.removeFromRight(reduced);
     
     auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
     meterBounds.removeFromTop(fullBounds.getHeight() / 12);

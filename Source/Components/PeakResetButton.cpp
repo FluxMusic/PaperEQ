@@ -23,7 +23,7 @@ PeakResetButton::~PeakResetButton()
 
 void PeakResetButton::paint(juce::Graphics& g)
 {
-    getLookAndFeel().drawButtonBackground(g, *this, juce::Colours::floralwhite, false, false);
+    getLookAndFeel().drawButtonBackground(g, *this, juce::Colours::floralwhite.withBrightness(0.95), false, false);
     
     const auto bounds = getLocalBounds();
     

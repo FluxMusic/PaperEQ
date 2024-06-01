@@ -456,7 +456,6 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
     if (parameterID == "OutputGain")
     {
         outputGain.setGainDecibels(parameterSettings.outputGainDB);
-        std::cout << parameterSettings.outputGainDB << std::endl;
     }
 }
 

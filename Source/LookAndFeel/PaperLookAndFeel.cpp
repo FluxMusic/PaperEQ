@@ -72,7 +72,7 @@ void PaperLookAndFeel::drawLinearSlider(juce::Graphics& g,
     if (const auto sliderKnob = juce::XmlDocument::parse(BinaryData::OutputGainSliderKnob_svg))
     {
         const auto drawable = juce::Drawable::createFromSVG(*sliderKnob);
-        g.setColour(juce::Colours::floralwhite);
+        g.setColour(juce::Colours::floralwhite.withBrightness(0.95));
         g.fillRect(knobBounds);
         drawable->setTransformToFit(knobBounds.toFloat(), juce::RectanglePlacement::stretchToFit);
         drawable->draw(g, 1.f);

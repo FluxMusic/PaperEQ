@@ -42,7 +42,7 @@ void OutputComponent::timerCallback()
 
 void OutputComponent::paint(juce::Graphics& g)
 {
-    g.fillAll(juce::Colours::floralwhite);
+    g.fillAll(juce::Colours::floralwhite.withBrightness(0.95));
     auto bounds = getLocalBounds();
     auto descBounds = bounds.removeFromBottom(bounds.getHeight() / 8);
     
