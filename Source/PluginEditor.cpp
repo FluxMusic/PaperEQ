@@ -74,14 +74,14 @@ void PaperEQAudioProcessorEditor::paint (juce::Graphics& g)
 //    g.fillRect(peakBounds);
     
     auto highShelfBounds = bounds.removeFromLeft(bounds.getWidth() / 2);
-    g.setColour(juce::Colours::green);
-    g.fillRect(highShelfBounds);
+//    g.setColour(juce::Colours::green);
+//    g.fillRect(highShelfBounds);
     
-    g.setColour(juce::Colours::blue);
-    g.fillRect(bounds);
+//    g.setColour(juce::Colours::blue);
+//    g.fillRect(bounds);
 
     g.setColour (juce::Colours::black);
-    g.setFont (25.0f);
+    g.setFont (labelBounds.getHeight() / 1.5);
     g.drawFittedText ("Paper EQ", labelBounds, juce::Justification::centred, 1);
 }
 
@@ -92,7 +92,6 @@ void PaperEQAudioProcessorEditor::resized()
     
     auto meterBounds = bounds.removeFromRight(bounds.getWidth() / 4);
     meterBounds.removeFromTop(fullBounds.getHeight() / 12);
-    meterBounds.removeFromBottom(fullBounds.getHeight() / 10);
     meterBounds.removeFromLeft(fullBounds.getWidth() / 50);
     meterBounds.removeFromRight(fullBounds.getWidth() / 50);
     output.setBounds(meterBounds);

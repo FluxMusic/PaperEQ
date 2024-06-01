@@ -55,11 +55,11 @@ void LevelMeter::paint(juce::Graphics& g)
     
     const auto fullBounds = getLocalBounds();
     auto bounds = fullBounds;
+    auto levelBounds = bounds.removeFromBottom(bounds.getHeight() / 18);
     auto scaleBounds = bounds;
     
     g.setColour(juce::Colours::blue);
     
-    scaleBounds.removeFromBottom(scaleBounds.getHeight() / 18);
     scaleBounds.removeFromTop(scaleBounds.getHeight() / 15);
     
     auto displayBounds = scaleBounds;
@@ -123,6 +123,10 @@ void LevelMeter::paint(juce::Graphics& g)
     juce::String text = juce::String::formatted("%.1f", oldLevel);
     
     auto newLevel = getPeakLevel();
+    
+    auto font = juce::Font(levelBounds.getHeight() / 1.6);
+    
+    rmsDB.setFont(font);
     
     rmsDB.setText(juce::String::formatted("%.1f", newLevel), juce::dontSendNotification);
     

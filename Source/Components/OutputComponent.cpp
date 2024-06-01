@@ -43,11 +43,28 @@ void OutputComponent::timerCallback()
 void OutputComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::floralwhite);
+    auto bounds = getLocalBounds();
+    auto descBounds = bounds.removeFromBottom(bounds.getHeight() / 8);
+    
+    auto inputBounds = descBounds.removeFromLeft(descBounds.getWidth() / 3);
+    auto outputBounds = descBounds.removeFromRight(descBounds.getWidth() / 2);
+    
+    auto space = descBounds.getWidth() / 3;
+    
+    inputBounds.removeFromRight(space);
+    outputBounds.removeFromLeft(space);
+    
+    g.setColour(juce::Colours::black);
+    g.setFont(descBounds.getHeight() / 2.4);
+    g.drawFittedText("IN", inputBounds, juce::Justification::centred, 1);
+    g.drawFittedText("OUT", outputBounds, juce::Justification::centred, 1);
+    g.drawFittedText("GAIN", descBounds, juce::Justification::centred, 1);
 }
 
 void OutputComponent::resized()
 {
     auto bounds = getLocalBounds();
+    bounds.removeFromBottom(bounds.getHeight() / 8);
     auto inputMeterBounds = bounds.removeFromLeft(bounds.getWidth() / 3);
     auto outputMeterBounds = bounds.removeFromRight(bounds.getWidth() / 2);
     

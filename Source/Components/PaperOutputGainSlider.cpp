@@ -38,6 +38,10 @@ void PaperOutputGainSlider::paint(juce::Graphics& g)
     labelText << " dB";
     
     textBox.setText(labelText, juce::dontSendNotification);
+    
+    auto font = juce::Font(labelBounds.getHeight() / 1.6);
+    
+    textBox.setFont(font);
     textBox.setColour(juce::Label::ColourIds::backgroundColourId, juce::Colours::floralwhite);
     textBox.setColour(juce::Label::ColourIds::textColourId, juce::Colours::black);
     
