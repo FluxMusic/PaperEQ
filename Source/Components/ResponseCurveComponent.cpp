@@ -122,7 +122,7 @@ void ResponseCurveComponent::paint(juce::Graphics& g)
     }
     
     g.setColour(juce::Colours::black);
-    g.strokePath(responseCurve, juce::PathStrokeType(3.f));
+    g.strokePath(responseCurve, juce::PathStrokeType(bottom / 150));
     g.setColour(juce::Colours::black.withAlpha(0.3f));
     g.fillPath(responseCurveFill);
 }
