@@ -89,6 +89,13 @@ public:
     
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getCoefficients();
     
+    template <int chainSegment>
+    void setChainSegmentBypass()
+    {
+        leftChain.setBypassed<chainSegment>(!leftChain.isBypassed<chainSegment>());
+        rightChain.setBypassed<chainSegment>(!rightChain.isBypassed<chainSegment>());
+    }
+    
 private:
     //==============================================================================
     juce::AudioProcessorValueTreeState apvts;

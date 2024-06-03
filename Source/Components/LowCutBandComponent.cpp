@@ -20,6 +20,11 @@ slopeSliderAttachment(audioProcessor.getAPVTS(), "LowCutSlope", slopeSlider)
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(slopeSlider);
+    
+    bypassButton.onClick = [this]()
+    {
+        audioProcessor.setChainSegmentBypass<0>();
+    };
 }
 
 void LowCutBandComponent::paint(juce::Graphics& g)

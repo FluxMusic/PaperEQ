@@ -23,6 +23,11 @@ qSliderAttachment(audioProcessor.getAPVTS(), "PeakQ", qSlider)
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(qSlider);
+    
+    bypassButton.onClick = [this]()
+    {
+        audioProcessor.setChainSegmentBypass<2>();
+    };
 }
 
 void PeakBandComponent::paint(juce::Graphics& g)

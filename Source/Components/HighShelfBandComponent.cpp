@@ -23,6 +23,11 @@ qSliderAttachment(audioProcessor.getAPVTS(), "HighShelfQ", qSlider)
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(qSlider);
+    
+    bypassButton.onClick = [this]()
+    {
+        audioProcessor.setChainSegmentBypass<3>();
+    };
 }
 
 void HighShelfBandComponent::paint(juce::Graphics& g)

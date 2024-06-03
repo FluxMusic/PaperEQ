@@ -20,6 +20,11 @@ slopeSliderAttachment(audioProcessor.getAPVTS(), "HighCutSlope", slopeSlider)
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(slopeSlider);
+    
+    bypassButton.onClick = [this]()
+    {
+        audioProcessor.setChainSegmentBypass<4>();
+    };
 }
 
 void HighCutBandComponent::paint(juce::Graphics& g)
