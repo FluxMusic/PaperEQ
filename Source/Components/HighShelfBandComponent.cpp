@@ -17,17 +17,13 @@ freqSlider(*audioProcessor.getAPVTS().getParameter("HighShelfFreq"), ""),
 qSlider(*audioProcessor.getAPVTS().getParameter("HighShelfQ"), ""),
 gainSliderAttachment(audioProcessor.getAPVTS(), "HighShelfGain", gainSlider),
 freqSliderAttachment(audioProcessor.getAPVTS(), "HighShelfFreq", freqSlider),
-qSliderAttachment(audioProcessor.getAPVTS(), "HighShelfQ", qSlider)
+qSliderAttachment(audioProcessor.getAPVTS(), "HighShelfQ", qSlider),
+bypassButtonAttachment(audioProcessor.getAPVTS(), "HighShelfBypass", bypassButton)
 {
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(qSlider);
-    
-    bypassButton.onClick = [this]()
-    {
-        audioProcessor.setChainSegmentBypass<3>();
-    };
 }
 
 void HighShelfBandComponent::paint(juce::Graphics& g)

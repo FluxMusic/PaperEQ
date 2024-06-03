@@ -25,21 +25,26 @@ apvts(*this, nullptr, "Parameters", createParameterLayout())
 {
     apvts.addParameterListener("LowCutFreq", this);
     apvts.addParameterListener("LowCutSlope", this);
+    apvts.addParameterListener("LowCutBypass", this);
     
     apvts.addParameterListener("LowShelfGain", this);
     apvts.addParameterListener("LowShelfFreq", this);
     apvts.addParameterListener("LowShelfQ", this);
+    apvts.addParameterListener("LowShelfBypass", this);
     
     apvts.addParameterListener("PeakGain", this);
     apvts.addParameterListener("PeakFreq", this);
     apvts.addParameterListener("PeakQ", this);
+    apvts.addParameterListener("PeakBypass", this);
     
     apvts.addParameterListener("HighShelfGain", this);
     apvts.addParameterListener("HighShelfFreq", this);
     apvts.addParameterListener("HighShelfQ", this);
+    apvts.addParameterListener("HighShelfBypass", this);
     
     apvts.addParameterListener("HighCutFreq", this);
     apvts.addParameterListener("HighCutSlope", this);
+    apvts.addParameterListener("HighCutBypass", this);
     
     apvts.addParameterListener("OutputGain", this);
 }
@@ -48,21 +53,26 @@ PaperEQAudioProcessor::~PaperEQAudioProcessor()
 {
     apvts.removeParameterListener("LowCutFreq", this);
     apvts.removeParameterListener("LowCutSlope", this);
+    apvts.removeParameterListener("LowCutBypass", this);
     
     apvts.removeParameterListener("LowShelfGain", this);
     apvts.removeParameterListener("LowShelfFreq", this);
     apvts.removeParameterListener("LowShelfQ", this);
+    apvts.removeParameterListener("LowShelfBypass", this);
     
     apvts.removeParameterListener("PeakGain", this);
     apvts.removeParameterListener("PeakFreq", this);
     apvts.removeParameterListener("PeakQ", this);
+    apvts.removeParameterListener("PeakBypass", this);
     
     apvts.removeParameterListener("HighShelfGain", this);
     apvts.removeParameterListener("HighShelfFreq", this);
     apvts.removeParameterListener("HighShelfQ", this);
+    apvts.removeParameterListener("HighShelfBypass", this);
     
     apvts.removeParameterListener("HighCutFreq", this);
     apvts.removeParameterListener("HighCutSlope", this);
+    apvts.removeParameterListener("HighCutBypass", this);
     
     apvts.removeParameterListener("OutputGain", this);
 }
@@ -299,45 +309,80 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
     
     auto parameterSettings = getParameterSettings(apvts);
     
-    if (parameterID == "LowCutFreq" || parameterID == "LowCutSlope")
+    const auto initialCoefficients = new juce::dsp::IIR::Coefficients<float>(1, 1, 1, 1, 1, 1);
+    
+    if (parameterID == "LowCutFreq" || parameterID == "LowCutSlope" || parameterID == "LowCutBypass")
     {
         updateLowCutFilter(parameterSettings, sampleRate);
     }
     
-    if (parameterID == "LowShelfGain" || parameterID == "LowShelfFreq" || parameterID == "LowShelfQ")
+    if (parameterID == "LowShelfGain" || parameterID == "LowShelfFreq" || parameterID == "LowShelfQ" || parameterID == "LowShelfBypass")
     {
         auto lowShelfCoefficients = juce::dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate,
                                                                                         parameterSettings.lowShelfFreq,
                                                                                         parameterSettings.lowShelfQ,
                                                                                         juce::Decibels::decibelsToGain(parameterSettings.lowShelfGain));
         
-        leftChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
-        rightChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
+        if (!parameterSettings.lowShelfBypass)
+        {
+            leftChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
+            rightChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
+        }
+        else
+        {
+            leftChain.get<ChainFilters::LowShelf>().coefficients = initialCoefficients;
+            rightChain.get<ChainFilters::LowShelf>().coefficients = initialCoefficients;
+        }
+        
+        leftChain.setBypassed<ChainFilters::LowShelf>(parameterSettings.lowShelfBypass);
+        rightChain.setBypassed<ChainFilters::LowShelf>(parameterSettings.lowShelfBypass);
     }
     
-    if (parameterID == "PeakGain" || parameterID == "PeakFreq" || parameterID == "PeakQ")
+    if (parameterID == "PeakGain" || parameterID == "PeakFreq" || parameterID == "PeakQ" || parameterID == "PeakBypass")
     {
         auto peakCoefficients = juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
                                                             parameterSettings.peakFreq,
                                                             parameterSettings.peakQ,
                                                             juce::Decibels::decibelsToGain(parameterSettings.peakGain));
         
-        leftChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
-        rightChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
+        if (!parameterSettings.peakBypass)
+        {
+            leftChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
+            rightChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
+        }
+        else
+        {
+            leftChain.get<ChainFilters::Peak>().coefficients = initialCoefficients;
+            rightChain.get<ChainFilters::Peak>().coefficients = initialCoefficients;
+        }
+        
+        leftChain.setBypassed<ChainFilters::Peak>(parameterSettings.peakBypass);
+        rightChain.setBypassed<ChainFilters::Peak>(parameterSettings.peakBypass);
     }
     
-    if (parameterID == "HighShelfGain" || parameterID == "HighShelfFreq" || parameterID == "HighShelfQ")
+    if (parameterID == "HighShelfGain" || parameterID == "HighShelfFreq" || parameterID == "HighShelfQ" || parameterID == "HighShelfBypass")
     {
         auto highShelfCoefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate,
                                                                                         parameterSettings.highShelfFreq,
                                                                                         parameterSettings.highShelfQ,
                                                                                         juce::Decibels::decibelsToGain(parameterSettings.highShelfGain));
         
-        leftChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
-        rightChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
+        if (!parameterSettings.highShelfBypass)
+        {
+            leftChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
+            rightChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
+        }
+        else
+        {
+            leftChain.get<ChainFilters::HighShelf>().coefficients = initialCoefficients;
+            rightChain.get<ChainFilters::HighShelf>().coefficients = initialCoefficients;
+        }
+        
+        leftChain.setBypassed<ChainFilters::HighShelf>(parameterSettings.highShelfBypass);
+        rightChain.setBypassed<ChainFilters::HighShelf>(parameterSettings.highShelfBypass);
     }
     
-    if (parameterID == "HighCutFreq" || parameterID == "HighCutSlope")
+    if (parameterID == "HighCutFreq" || parameterID == "HighCutSlope" || parameterID == "HighCutBypass")
     {
         updateHighCutFilter(parameterSettings, sampleRate);
     }
@@ -364,23 +409,28 @@ juce::AudioProcessorValueTreeState::ParameterLayout PaperEQAudioProcessor::creat
     
     layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowCutFreq", 1), "Low Cut Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 20.f));
     layout.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID("LowCutSlope", 2), "Low Cut Slope", stringArray, 0));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID("LowCutBypass", 3), "Low Cut Bypass", true));
     
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowShelfGain", 3), "Low Shelf Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowShelfFreq", 4), "Low Shelf Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 200.f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowShelfQ", 5), "Low Shelf Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowShelfGain", 4), "Low Shelf Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowShelfFreq", 5), "Low Shelf Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 200.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("LowShelfQ", 6), "Low Shelf Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID("LowShelfBypass", 7), "Low Shelf Bypass", false));
     
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("PeakGain", 6), "Peak Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("PeakFreq", 7), "Peak Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 750.f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("PeakQ", 8), "Peak Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("PeakGain", 8), "Peak Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("PeakFreq", 9), "Peak Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 750.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("PeakQ", 10), "Peak Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID("PeakBypass", 11), "Peak Bypass", false));
     
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighShelfGain", 9), "High Shelf Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighShelfFreq", 10), "High Shelf Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 5000.f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighShelfQ", 11), "High Shelf Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighShelfGain", 12), "High Shelf Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighShelfFreq", 13), "High Shelf Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 5000.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighShelfQ", 14), "High Shelf Q", juce::NormalisableRange<float>(0.1f, 10.f, 0.1f, 1.f), 1.f));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID("HighShelfBypass", 15), "High Shelf Bypass", false));
     
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighCutFreq", 12), "High Cut Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 20000.f));
-    layout.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID("HighCutSlope", 13), "High Cut Slope", stringArray, 0));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("HighCutFreq", 16), "High Cut Freq", juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.25f), 20000.f));
+    layout.add(std::make_unique<juce::AudioParameterChoice>(juce::ParameterID("HighCutSlope", 17), "High Cut Slope", stringArray, 0));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID("HighCutBypass", 18), "High Cut Bypass", true));
     
-    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("OutputGain", 14), "Output Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("OutputGain", 19), "Output Gain", juce::NormalisableRange<float>(-18.f, 18.f, 0.1f, 1.f), 0.f));
     
     return layout;
 }
@@ -391,21 +441,26 @@ ParameterSettings PaperEQAudioProcessor::getParameterSettings(juce::AudioProcess
     
     parameterSettings.lowCutFreq = apvts.getRawParameterValue("LowCutFreq")->load();
     parameterSettings.lowCutSlope = static_cast<Slope>(apvts.getRawParameterValue("LowCutSlope")->load());
+    parameterSettings.lowCutBypass = apvts.getRawParameterValue("LowCutBypass")->load() > 0.5f;
     
     parameterSettings.lowShelfGain = apvts.getRawParameterValue("LowShelfGain")->load();
     parameterSettings.lowShelfFreq = apvts.getRawParameterValue("LowShelfFreq")->load();
     parameterSettings.lowShelfQ = apvts.getRawParameterValue("LowShelfQ")->load();
+    parameterSettings.lowShelfBypass = apvts.getRawParameterValue("LowShelfBypass")->load() > 0.5f;
     
     parameterSettings.peakGain = apvts.getRawParameterValue("PeakGain")->load();
     parameterSettings.peakFreq = apvts.getRawParameterValue("PeakFreq")->load();
     parameterSettings.peakQ = apvts.getRawParameterValue("PeakQ")->load();
+    parameterSettings.peakBypass = apvts.getRawParameterValue("PeakBypass")->load() > 0.5f;
     
     parameterSettings.highShelfGain = apvts.getRawParameterValue("HighShelfGain")->load();
     parameterSettings.highShelfFreq = apvts.getRawParameterValue("HighShelfFreq")->load();
     parameterSettings.highShelfQ = apvts.getRawParameterValue("HighShelfQ")->load();
+    parameterSettings.highShelfBypass = apvts.getRawParameterValue("HighShelfBypass")->load() > 0.5f;
     
     parameterSettings.highCutFreq = apvts.getRawParameterValue("HighCutFreq")->load();
     parameterSettings.highCutSlope = static_cast<Slope>(apvts.getRawParameterValue("HighCutSlope")->load());
+    parameterSettings.highCutBypass = apvts.getRawParameterValue("HighCutBypass")->load() > 0.5f;
     
     parameterSettings.outputGainDB = apvts.getRawParameterValue("OutputGain")->load();
     
@@ -443,27 +498,27 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
         case Slope_48:
         {
             if (!leftChain.get<0>().isBypassed<4>())
-            coefficients.add(leftChain.get<0>().get<4>().coefficients);
+                coefficients.add(leftChain.get<0>().get<4>().coefficients);
         }
         case Slope_36:
         {
             if (!leftChain.get<0>().isBypassed<3>())
-            coefficients.add(leftChain.get<0>().get<3>().coefficients);
+                coefficients.add(leftChain.get<0>().get<3>().coefficients);
         }
         case Slope_24:
         {
             if (!leftChain.get<0>().isBypassed<2>())
-            coefficients.add(leftChain.get<0>().get<2>().coefficients);
+                coefficients.add(leftChain.get<0>().get<2>().coefficients);
         }
         case Slope_12:
         {
             if (!leftChain.get<0>().isBypassed<1>())
-            coefficients.add(leftChain.get<0>().get<1>().coefficients);
+                coefficients.add(leftChain.get<0>().get<1>().coefficients);
         }
         case Slope_6:
         {
             if (!leftChain.get<0>().isBypassed<0>())
-            coefficients.add(leftChain.get<0>().get<0>().coefficients);
+                coefficients.add(leftChain.get<0>().get<0>().coefficients);
         }
     }
     
@@ -505,6 +560,8 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
 
 void PaperEQAudioProcessor::updateLowCutFilter(ParameterSettings& parameterSettings, double sampleRate)
 {
+    const auto initialCoefficients = new juce::dsp::IIR::Coefficients<float>(1, 1, 1, 1, 1, 1);
+    
     auto filterCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 1);
     
     switch (parameterSettings.lowCutSlope)
@@ -541,29 +598,49 @@ void PaperEQAudioProcessor::updateLowCutFilter(ParameterSettings& parameterSetti
     {
         case Slope_48:
         {
-            updateLowCutFilterCoefficients<3>(filterCoefficients[3]);
+            if (!parameterSettings.lowCutBypass)
+                updateLowCutFilterCoefficients<3>(filterCoefficients[3]);
+            else
+                updateLowCutFilterCoefficients<3>(initialCoefficients);
         }
         case Slope_36:
         {
-            updateLowCutFilterCoefficients<2>(filterCoefficients[2]);
+            if (!parameterSettings.lowCutBypass)
+                updateLowCutFilterCoefficients<2>(filterCoefficients[2]);
+            else
+                updateLowCutFilterCoefficients<2>(initialCoefficients);
         }
         case Slope_24:
         {
-            updateLowCutFilterCoefficients<1>(filterCoefficients[1]);
+            if (!parameterSettings.lowCutBypass)
+                updateLowCutFilterCoefficients<1>(filterCoefficients[1]);
+            else
+                updateLowCutFilterCoefficients<1>(initialCoefficients);
         }
         case Slope_12:
         {
-            updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
+            if (!parameterSettings.lowCutBypass)
+                updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
+            else
+                updateLowCutFilterCoefficients<0>(initialCoefficients);
         }
         case Slope_6:
         {
-            updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
+            if (!parameterSettings.lowCutBypass)
+                updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
+            else
+                updateLowCutFilterCoefficients<0>(initialCoefficients);
         }
     }
+    
+    leftChain.setBypassed<ChainFilters::LowCut>(parameterSettings.lowCutBypass);
+    rightChain.setBypassed<ChainFilters::LowCut>(parameterSettings.lowCutBypass);
 }
 
 void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSettings, double sampleRate)
 {
+    const auto initialCoefficients = new juce::dsp::IIR::Coefficients<float>(1, 1, 1, 1, 1, 1);
+    
     auto filterCoefficients = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 1);
     
     switch (parameterSettings.highCutSlope)
@@ -600,25 +677,45 @@ void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSett
     {
         case Slope_48:
         {
-            updateHighCutFilterCoefficients<3>(filterCoefficients[3]);
+            if (!parameterSettings.highCutBypass)
+                updateHighCutFilterCoefficients<3>(filterCoefficients[3]);
+            else
+                updateHighCutFilterCoefficients<3>(initialCoefficients);
         }
         case Slope_36:
         {
-            updateHighCutFilterCoefficients<2>(filterCoefficients[2]);
+            if (!parameterSettings.highCutBypass)
+                updateHighCutFilterCoefficients<2>(filterCoefficients[2]);
+            else
+                updateHighCutFilterCoefficients<2>(initialCoefficients);
         }
         case Slope_24:
         {
-            updateHighCutFilterCoefficients<1>(filterCoefficients[1]);
+            if (!parameterSettings.highCutBypass)
+                updateHighCutFilterCoefficients<1>(filterCoefficients[1]);
+            else
+                updateHighCutFilterCoefficients<1>(initialCoefficients);
         }
         case Slope_12:
         {
-            updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
+            if (!parameterSettings.highCutBypass)
+                updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
+            else
+                updateHighCutFilterCoefficients<0>(initialCoefficients);
         }
         case Slope_6:
         {
-            updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
+            if (!parameterSettings.highCutBypass)
+                updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
+            else
+                updateHighCutFilterCoefficients<0>(initialCoefficients);
+            
+            leftChain.get<4>().isBypassed<0>();
         }
     }
+    
+    leftChain.setBypassed<ChainFilters::HighCut>(parameterSettings.highCutBypass);
+    rightChain.setBypassed<ChainFilters::HighCut>(parameterSettings.highCutBypass);
 }
 
 template <int filterSegment, typename CoefficientType>

@@ -17,17 +17,13 @@ freqSlider(*audioProcessor.getAPVTS().getParameter("PeakFreq"), ""),
 qSlider(*audioProcessor.getAPVTS().getParameter("PeakQ"), ""),
 gainSliderAttachment(audioProcessor.getAPVTS(), "PeakGain", gainSlider),
 freqSliderAttachment(audioProcessor.getAPVTS(), "PeakFreq", freqSlider),
-qSliderAttachment(audioProcessor.getAPVTS(), "PeakQ", qSlider)
+qSliderAttachment(audioProcessor.getAPVTS(), "PeakQ", qSlider),
+bypassButtonAttachment(audioProcessor.getAPVTS(), "PeakBypass", bypassButton)
 {
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(qSlider);
-    
-    bypassButton.onClick = [this]()
-    {
-        audioProcessor.setChainSegmentBypass<2>();
-    };
 }
 
 void PeakBandComponent::paint(juce::Graphics& g)

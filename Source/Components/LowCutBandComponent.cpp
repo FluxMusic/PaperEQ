@@ -15,18 +15,12 @@ LowCutBandComponent::LowCutBandComponent(PaperEQAudioProcessor& p)
 freqSlider(*audioProcessor.getAPVTS().getParameter("LowCutFreq"), ""),
 slopeSlider(*audioProcessor.getAPVTS().getParameter("LowCutSlope"), ""),
 freqSliderAttachment(audioProcessor.getAPVTS(), "LowCutFreq", freqSlider),
-slopeSliderAttachment(audioProcessor.getAPVTS(), "LowCutSlope", slopeSlider)
+slopeSliderAttachment(audioProcessor.getAPVTS(), "LowCutSlope", slopeSlider),
+bypassButtonAttachment(audioProcessor.getAPVTS(), "LowCutBypass", bypassButton)
 {
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(slopeSlider);
-    
-    bypassButton.setToggleState(true, juce::NotificationType::dontSendNotification);
-    
-    bypassButton.onClick = [this]()
-    {
-        audioProcessor.setChainSegmentBypass<0>();
-    };
 }
 
 void LowCutBandComponent::paint(juce::Graphics& g)

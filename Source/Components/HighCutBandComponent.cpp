@@ -15,18 +15,12 @@ HighCutBandComponent::HighCutBandComponent(PaperEQAudioProcessor& p)
 freqSlider(*audioProcessor.getAPVTS().getParameter("HighCutFreq"), ""),
 slopeSlider(*audioProcessor.getAPVTS().getParameter("HighCutSlope"), ""),
 freqSliderAttachment(audioProcessor.getAPVTS(), "HighCutFreq", freqSlider),
-slopeSliderAttachment(audioProcessor.getAPVTS(), "HighCutSlope", slopeSlider)
+slopeSliderAttachment(audioProcessor.getAPVTS(), "HighCutSlope", slopeSlider),
+bypassButtonAttachment(audioProcessor.getAPVTS(), "HighCutBypass", bypassButton)
 {
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(slopeSlider);
-    
-    bypassButton.setToggleState(true, juce::NotificationType::dontSendNotification);
-    
-    bypassButton.onClick = [this]()
-    {
-        audioProcessor.setChainSegmentBypass<4>();
-    };
 }
 
 void HighCutBandComponent::paint(juce::Graphics& g)

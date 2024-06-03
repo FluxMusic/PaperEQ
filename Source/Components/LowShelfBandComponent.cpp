@@ -17,17 +17,13 @@ freqSlider(*audioProcessor.getAPVTS().getParameter("LowShelfFreq"), ""),
 qSlider(*audioProcessor.getAPVTS().getParameter("LowShelfQ"), ""),
 gainSliderAttachment(audioProcessor.getAPVTS(), "LowShelfGain", gainSlider),
 freqSliderAttachment(audioProcessor.getAPVTS(), "LowShelfFreq", freqSlider),
-qSliderAttachment(audioProcessor.getAPVTS(), "LowShelfQ", qSlider)
+qSliderAttachment(audioProcessor.getAPVTS(), "LowShelfQ", qSlider),
+bypassButtonAttachment(audioProcessor.getAPVTS(), "LowShelfBypass", bypassButton)
 {
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(qSlider);
-    
-    bypassButton.onClick = [this]()
-    {
-        audioProcessor.setChainSegmentBypass<1>();
-    };
 }
 
 void LowShelfBandComponent::paint(juce::Graphics& g)

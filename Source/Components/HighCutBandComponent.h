@@ -29,4 +29,5 @@ private:
     PaperBypass bypassButton {"Bypass"};
     PaperKnob freqSlider, slopeSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment freqSliderAttachment, slopeSliderAttachment;
+    juce::AudioProcessorValueTreeState::ButtonAttachment bypassButtonAttachment;
 };

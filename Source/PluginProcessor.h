@@ -24,11 +24,17 @@ struct ParameterSettings
 {
     float lowCutFreq { 0 };
     Slope lowCutSlope { Slope::Slope_6 };
+    bool lowCutBypass { false };
     float lowShelfGain { 0 }, lowShelfFreq { 200 }, lowShelfQ { 1 };
+    bool lowShelfBypass { false };
     float peakGain { 0 }, peakFreq { 750 }, peakQ { 1 };
+    bool peakBypass { false };
     float highShelfGain { 0 }, highShelfFreq { 5000 }, highShelfQ { 1 };
+    bool highShelfBypass { false };
     float highCutFreq { 20000 };
     Slope highCutSlope { Slope::Slope_6 };
+    bool highCutBypass { false };
+    
     float outputGainDB { 0 };
 };
 
@@ -90,10 +96,16 @@ public:
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getCoefficients();
     
     template <int chainSegment>
-    void setChainSegmentBypass()
+    void setChainSegmentBypass(bool bypassed)
     {
-        leftChain.setBypassed<chainSegment>(!leftChain.isBypassed<chainSegment>());
-        rightChain.setBypassed<chainSegment>(!rightChain.isBypassed<chainSegment>());
+        leftChain.setBypassed<chainSegment>(bypassed);
+        rightChain.setBypassed<chainSegment>(bypassed);
+    }
+    
+    template <int chainSegment>
+    bool getChainSegmentBypass()
+    {
+        return leftChain.isBypassed<chainSegment>();
     }
     
 private:
