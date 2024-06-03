@@ -38,7 +38,7 @@ void PeakBandComponent::paint(juce::Graphics& g)
     
     g.fillRect(bounds);
     
-    g.setColour(juce::Colours::yellow);
+    bypassButton.getToggleState() ? g.setColour(juce::Colours::limegreen.withBrightness(0.7f).withSaturation(0.4f)) : g.setColour(juce::Colours::limegreen.withSaturation(0.4f));
     g.drawRoundedRectangle(bounds, 5, bounds.getWidth() / 50);
     
     auto textBounds = bounds.removeFromTop(bounds.getHeight() / 5).toNearestInt();

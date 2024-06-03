@@ -37,7 +37,7 @@ void HighCutBandComponent::paint(juce::Graphics& g)
     
     g.fillRect(bounds);
     
-    g.setColour(juce::Colours::blue);
+    bypassButton.getToggleState() ? g.setColour(juce::Colours::blueviolet.withBrightness(0.7f).withSaturation(0.5f)) : g.setColour(juce::Colours::blueviolet.withSaturation(0.5f));
     g.drawRoundedRectangle(bounds, 5, bounds.getWidth() / 50);
     
     auto textBounds = bounds.removeFromTop(bounds.getHeight() / 5).toNearestInt();

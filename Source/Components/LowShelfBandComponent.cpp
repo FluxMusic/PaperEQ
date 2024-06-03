@@ -38,7 +38,7 @@ void LowShelfBandComponent::paint(juce::Graphics& g)
     
     g.fillRect(bounds);
     
-    g.setColour(juce::Colours::orange);
+    bypassButton.getToggleState() ? g.setColour(juce::Colours::orange.withBrightness(0.7f).withSaturation(0.9f)) : g.setColour(juce::Colours::orange.withSaturation(0.7f));
     g.drawRoundedRectangle(bounds, 5, bounds.getWidth() / 50);
     
     auto textBounds = bounds.removeFromTop(bounds.getHeight() / 5).toNearestInt();
