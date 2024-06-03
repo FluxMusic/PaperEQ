@@ -21,6 +21,8 @@ slopeSliderAttachment(audioProcessor.getAPVTS(), "LowCutSlope", slopeSlider)
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(slopeSlider);
     
+    bypassButton.setToggleState(true, juce::NotificationType::dontSendNotification);
+    
     bypassButton.onClick = [this]()
     {
         audioProcessor.setChainSegmentBypass<0>();

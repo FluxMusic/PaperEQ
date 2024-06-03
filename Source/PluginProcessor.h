@@ -116,5 +116,14 @@ private:
     
     void parameterChanged(const juce::String& parameterID, float newValue) override;
     
+    void updateLowCutFilter(ParameterSettings& parameterSettings, double sampleRate);
+    void updateHighCutFilter(ParameterSettings& parameterSettings, double sampleRate);
+    
+    template <int filterSegment, typename CoefficientType>
+    void updateLowCutFilterCoefficients(const CoefficientType& newCoefficients);
+    
+    template <int filterSegment, typename CoefficientType>
+    void updateHighCutFilterCoefficients(const CoefficientType& newCoefficients);
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PaperEQAudioProcessor)
 };

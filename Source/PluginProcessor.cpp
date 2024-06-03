@@ -158,6 +158,9 @@ void PaperEQAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
     
     outputLevelL.setCurrentAndTargetValue(-100.f);
     outputLevelR.setCurrentAndTargetValue(-100.f);
+    
+    updateLowCutFilter(parameterSettings, sampleRate);
+    updateHighCutFilter(parameterSettings, sampleRate);
 }
 
 void PaperEQAudioProcessor::releaseResources()
@@ -298,64 +301,7 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
     
     if (parameterID == "LowCutFreq" || parameterID == "LowCutSlope")
     {
-        auto lowCutCoefficientsOrder1 = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 1);
-        auto lowCutCoefficientsOrder2 = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 2);
-        
-        leftChain.get<0>().setBypassed<0>(true);
-        leftChain.get<0>().setBypassed<1>(true);
-        leftChain.get<0>().setBypassed<2>(true);
-        leftChain.get<0>().setBypassed<3>(true);
-        leftChain.get<0>().setBypassed<4>(true);
-        
-        rightChain.get<0>().setBypassed<0>(true);
-        rightChain.get<0>().setBypassed<1>(true);
-        rightChain.get<0>().setBypassed<2>(true);
-        rightChain.get<0>().setBypassed<3>(true);
-        rightChain.get<0>().setBypassed<4>(true);
-        
-        switch (parameterSettings.lowCutSlope)
-        {
-            case Slope_48:
-            {
-                leftChain.get<0>().setBypassed<4>(false);
-                rightChain.get<0>().setBypassed<4>(false);
-                
-                leftChain.get<0>().get<4>().coefficients = lowCutCoefficientsOrder2[0];
-                rightChain.get<0>().get<4>().coefficients = lowCutCoefficientsOrder2[0];
-            }
-            case Slope_36:
-            {
-                leftChain.get<0>().setBypassed<3>(false);
-                rightChain.get<0>().setBypassed<3>(false);
-                
-                leftChain.get<0>().get<3>().coefficients = lowCutCoefficientsOrder2[0];
-                rightChain.get<0>().get<3>().coefficients = lowCutCoefficientsOrder2[0];
-            }
-            case Slope_24:
-            {
-                leftChain.get<0>().setBypassed<2>(false);
-                rightChain.get<0>().setBypassed<2>(false);
-                
-                leftChain.get<0>().get<2>().coefficients = lowCutCoefficientsOrder2[0];
-                rightChain.get<0>().get<2>().coefficients = lowCutCoefficientsOrder2[0];
-            }
-            case Slope_12:
-            {
-                leftChain.get<0>().setBypassed<1>(false);
-                rightChain.get<0>().setBypassed<1>(false);
-                
-                leftChain.get<0>().get<1>().coefficients = lowCutCoefficientsOrder1[0];
-                rightChain.get<0>().get<1>().coefficients = lowCutCoefficientsOrder1[0];
-            }
-            case Slope_6:
-            {
-                leftChain.get<0>().setBypassed<0>(false);
-                rightChain.get<0>().setBypassed<0>(false);
-                
-                leftChain.get<0>().get<0>().coefficients = lowCutCoefficientsOrder1[0];
-                rightChain.get<0>().get<0>().coefficients = lowCutCoefficientsOrder1[0];
-            }
-        }
+        updateLowCutFilter(parameterSettings, sampleRate);
     }
     
     if (parameterID == "LowShelfGain" || parameterID == "LowShelfFreq" || parameterID == "LowShelfQ")
@@ -393,64 +339,7 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
     
     if (parameterID == "HighCutFreq" || parameterID == "HighCutSlope")
     {
-        auto highCutCoefficientsOrder1 = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 1);
-        auto highCutCoefficientsOrder2 = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 2);
-        
-        leftChain.get<4>().setBypassed<0>(true);
-        leftChain.get<4>().setBypassed<1>(true);
-        leftChain.get<4>().setBypassed<2>(true);
-        leftChain.get<4>().setBypassed<3>(true);
-        leftChain.get<4>().setBypassed<4>(true);
-        
-        rightChain.get<4>().setBypassed<0>(true);
-        rightChain.get<4>().setBypassed<1>(true);
-        rightChain.get<4>().setBypassed<2>(true);
-        rightChain.get<4>().setBypassed<3>(true);
-        rightChain.get<4>().setBypassed<4>(true);
-        
-        switch (parameterSettings.highCutSlope)
-        {
-            case Slope_48:
-            {
-                leftChain.get<4>().setBypassed<4>(false);
-                rightChain.get<4>().setBypassed<4>(false);
-                
-                leftChain.get<4>().get<4>().coefficients = highCutCoefficientsOrder2[0];
-                rightChain.get<4>().get<4>().coefficients = highCutCoefficientsOrder2[0];
-            }
-            case Slope_36:
-            {
-                leftChain.get<4>().setBypassed<3>(false);
-                rightChain.get<4>().setBypassed<3>(false);
-                
-                leftChain.get<4>().get<3>().coefficients = highCutCoefficientsOrder2[0];
-                rightChain.get<4>().get<3>().coefficients = highCutCoefficientsOrder2[0];
-            }
-            case Slope_24:
-            {
-                leftChain.get<4>().setBypassed<2>(false);
-                rightChain.get<4>().setBypassed<2>(false);
-                
-                leftChain.get<4>().get<2>().coefficients = highCutCoefficientsOrder2[0];
-                rightChain.get<4>().get<2>().coefficients = highCutCoefficientsOrder2[0];
-            }
-            case Slope_12:
-            {
-                leftChain.get<4>().setBypassed<1>(false);
-                rightChain.get<4>().setBypassed<1>(false);
-                
-                leftChain.get<4>().get<1>().coefficients = highCutCoefficientsOrder1[0];
-                rightChain.get<4>().get<1>().coefficients = highCutCoefficientsOrder1[0];
-            }
-            case Slope_6:
-            {
-                leftChain.get<4>().setBypassed<0>(false);
-                rightChain.get<4>().setBypassed<0>(false);
-                
-                leftChain.get<4>().get<0>().coefficients = highCutCoefficientsOrder1[0];
-                rightChain.get<4>().get<0>().coefficients = highCutCoefficientsOrder1[0];
-            }
-        }
+        updateHighCutFilter(parameterSettings, sampleRate);
     }
     
     if (parameterID == "OutputGain")
@@ -612,4 +501,142 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
     }
     
     return coefficients;
+}
+
+void PaperEQAudioProcessor::updateLowCutFilter(ParameterSettings& parameterSettings, double sampleRate)
+{
+    auto filterCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 1);
+    
+    switch (parameterSettings.lowCutSlope)
+    {
+        case Slope_12:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 2);
+            break;
+        case Slope_24:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 4);
+            break;
+        case Slope_36:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 6);
+            break;
+        case Slope_48:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRHighpassHighOrderButterworthMethod(parameterSettings.lowCutFreq, sampleRate, 8);
+            break;
+        default:
+            break;
+    }
+    
+    leftChain.get<0>().setBypassed<0>(true);
+    leftChain.get<0>().setBypassed<1>(true);
+    leftChain.get<0>().setBypassed<2>(true);
+    leftChain.get<0>().setBypassed<3>(true);
+    leftChain.get<0>().setBypassed<4>(true);
+    
+    rightChain.get<0>().setBypassed<0>(true);
+    rightChain.get<0>().setBypassed<1>(true);
+    rightChain.get<0>().setBypassed<2>(true);
+    rightChain.get<0>().setBypassed<3>(true);
+    rightChain.get<0>().setBypassed<4>(true);
+    
+    switch (parameterSettings.lowCutSlope)
+    {
+        case Slope_48:
+        {
+            updateLowCutFilterCoefficients<3>(filterCoefficients[3]);
+        }
+        case Slope_36:
+        {
+            updateLowCutFilterCoefficients<2>(filterCoefficients[2]);
+        }
+        case Slope_24:
+        {
+            updateLowCutFilterCoefficients<1>(filterCoefficients[1]);
+        }
+        case Slope_12:
+        {
+            updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
+        }
+        case Slope_6:
+        {
+            updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
+        }
+    }
+}
+
+void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSettings, double sampleRate)
+{
+    auto filterCoefficients = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 1);
+    
+    switch (parameterSettings.highCutSlope)
+    {
+        case Slope_12:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 2);
+            break;
+        case Slope_24:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 4);
+            break;
+        case Slope_36:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 6);
+            break;
+        case Slope_48:
+            filterCoefficients = juce::dsp::FilterDesign<float>::designIIRLowpassHighOrderButterworthMethod(parameterSettings.highCutFreq, sampleRate, 8);
+            break;
+        default:
+            break;
+    }
+    
+    leftChain.get<4>().setBypassed<0>(true);
+    leftChain.get<4>().setBypassed<1>(true);
+    leftChain.get<4>().setBypassed<2>(true);
+    leftChain.get<4>().setBypassed<3>(true);
+    leftChain.get<4>().setBypassed<4>(true);
+    
+    rightChain.get<4>().setBypassed<0>(true);
+    rightChain.get<4>().setBypassed<1>(true);
+    rightChain.get<4>().setBypassed<2>(true);
+    rightChain.get<4>().setBypassed<3>(true);
+    rightChain.get<4>().setBypassed<4>(true);
+    
+    switch (parameterSettings.highCutSlope)
+    {
+        case Slope_48:
+        {
+            updateHighCutFilterCoefficients<3>(filterCoefficients[3]);
+        }
+        case Slope_36:
+        {
+            updateHighCutFilterCoefficients<2>(filterCoefficients[2]);
+        }
+        case Slope_24:
+        {
+            updateHighCutFilterCoefficients<1>(filterCoefficients[1]);
+        }
+        case Slope_12:
+        {
+            updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
+        }
+        case Slope_6:
+        {
+            updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
+        }
+    }
+}
+
+template <int filterSegment, typename CoefficientType>
+void PaperEQAudioProcessor::updateLowCutFilterCoefficients(const CoefficientType& newCoefficients)
+{
+    leftChain.get<0>().setBypassed<filterSegment>(false);
+    rightChain.get<0>().setBypassed<filterSegment>(false);
+    
+    leftChain.get<0>().get<filterSegment>().coefficients = newCoefficients;
+    rightChain.get<0>().get<filterSegment>().coefficients = newCoefficients;
+}
+
+template <int filterSegment, typename CoefficientType>
+void PaperEQAudioProcessor::updateHighCutFilterCoefficients(const CoefficientType& newCoefficients)
+{
+    leftChain.get<4>().setBypassed<filterSegment>(false);
+    rightChain.get<4>().setBypassed<filterSegment>(false);
+    
+    leftChain.get<4>().get<filterSegment>().coefficients = newCoefficients;
+    rightChain.get<4>().get<filterSegment>().coefficients = newCoefficients;
 }
