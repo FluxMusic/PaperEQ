@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "../PluginProcessor.h"
 #include "PaperKnob.h"
+#include "PaperBypass.h"
 
 class LowCutBandComponent : public juce::Component
 {
@@ -25,7 +26,7 @@ private:
     
     PaperEQAudioProcessor& audioProcessor;
     
-    juce::TextButton bypassButton {"Bypass"};
+    PaperBypass bypassButton {"Bypass"};
     PaperKnob freqSlider, slopeSlider;
     juce::AudioProcessorValueTreeState::SliderAttachment freqSliderAttachment, slopeSliderAttachment;
 };

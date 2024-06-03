@@ -42,6 +42,8 @@
               file="Source/Components/OutputComponent.cpp"/>
         <FILE id="Bbqfve" name="OutputComponent.h" compile="0" resource="0"
               file="Source/Components/OutputComponent.h"/>
+        <FILE id="b6Ok5C" name="PaperBypass.cpp" compile="1" resource="0" file="Source/Components/PaperBypass.cpp"/>
+        <FILE id="ASP6Pa" name="PaperBypass.h" compile="0" resource="0" file="Source/Components/PaperBypass.h"/>
         <FILE id="wS0Zai" name="PaperKnob.cpp" compile="1" resource="0" file="Source/Components/PaperKnob.cpp"/>
         <FILE id="d5mCrf" name="PaperKnob.h" compile="0" resource="0" file="Source/Components/PaperKnob.h"/>
         <FILE id="rvTJVV" name="PaperOutputGainSlider.cpp" compile="1" resource="0"
