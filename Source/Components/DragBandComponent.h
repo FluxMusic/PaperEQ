@@ -69,5 +69,5 @@ private:
     
     DragBandComponent::Thumb thumb;
     
-    static constexpr int thumbSize = 10;
+    static constexpr int thumbSize = 12;
 };

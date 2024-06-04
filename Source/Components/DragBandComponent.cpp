@@ -198,17 +198,17 @@ void DragBandComponent::paint(juce::Graphics &g)
     responseCurve.startNewSubPath(left, map(lineMagnitudes.front()));
 //    responseCurveFill.startNewSubPath(left, map(fillMagnitudes.front()));
     
-//    for (size_t i = 1; i < lineMagnitudes.size(); ++i)
-//    {
-//        responseCurve.lineTo(left + i, map(lineMagnitudes[i]));
-//    }
+    for (size_t i = 1; i < lineMagnitudes.size(); ++i)
+    {
+        responseCurve.lineTo(left + i, map(lineMagnitudes[i]));
+    }
 //    for (size_t i = 0; i < fillMagnitudes.size(); ++i)
 //    {
 //        responseCurveFill.lineTo(left + i, map(fillMagnitudes[i]));
 //    }
     
     g.setColour(color);
-    g.strokePath(responseCurve, juce::PathStrokeType( 17.f/*bottom / 20*/));
+    g.strokePath(responseCurve, juce::PathStrokeType( bottom / 200 ));
 //    g.setColour(color.withAlpha(0.3f));
 //    g.fillPath(responseCurveFill);
 }
