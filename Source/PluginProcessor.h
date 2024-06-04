@@ -90,6 +90,8 @@ public:
 
     juce::AudioProcessorValueTreeState& getAPVTS() {return apvts;}
     
+    ParameterSettings getParameterSettings(juce::AudioProcessorValueTreeState& apvts);
+    
     float getRMSInputLevel(const int channel);
     float getRMSOutputLevel(const int channel);
     
@@ -129,8 +131,6 @@ private:
     juce::LinearSmoothedValue<float> outputLevelL, outputLevelR;
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-    
-    ParameterSettings getParameterSettings(juce::AudioProcessorValueTreeState& apvts);
     
     void parameterChanged(const juce::String& parameterID, float newValue) override;
     
