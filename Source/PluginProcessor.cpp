@@ -312,8 +312,6 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
     
     auto parameterSettings = getParameterSettings(apvts);
     
-    const auto initialCoefficients = new juce::dsp::IIR::Coefficients<float>(1, 1, 1, 1, 1, 1);
-    
     if (parameterID == "LowCutFreq" || parameterID == "LowCutSlope" || parameterID == "LowCutBypass")
     {
         updateLowCutFilter(parameterSettings, sampleRate);
@@ -326,16 +324,8 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
                                                                                         parameterSettings.lowShelfQ,
                                                                                         juce::Decibels::decibelsToGain(parameterSettings.lowShelfGain));
         
-        if (!parameterSettings.lowShelfBypass)
-        {
-            leftChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
-            rightChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
-        }
-        else
-        {
-            leftChain.get<ChainFilters::LowShelf>().coefficients = initialCoefficients;
-            rightChain.get<ChainFilters::LowShelf>().coefficients = initialCoefficients;
-        }
+        leftChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
+        rightChain.get<ChainFilters::LowShelf>().coefficients = lowShelfCoefficients;
         
         leftChain.setBypassed<ChainFilters::LowShelf>(parameterSettings.lowShelfBypass);
         rightChain.setBypassed<ChainFilters::LowShelf>(parameterSettings.lowShelfBypass);
@@ -348,16 +338,8 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
                                                             parameterSettings.peakQ,
                                                             juce::Decibels::decibelsToGain(parameterSettings.peakGain));
         
-        if (!parameterSettings.peakBypass)
-        {
-            leftChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
-            rightChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
-        }
-        else
-        {
-            leftChain.get<ChainFilters::Peak>().coefficients = initialCoefficients;
-            rightChain.get<ChainFilters::Peak>().coefficients = initialCoefficients;
-        }
+        leftChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
+        rightChain.get<ChainFilters::Peak>().coefficients = peakCoefficients;
         
         leftChain.setBypassed<ChainFilters::Peak>(parameterSettings.peakBypass);
         rightChain.setBypassed<ChainFilters::Peak>(parameterSettings.peakBypass);
@@ -370,16 +352,8 @@ void PaperEQAudioProcessor::parameterChanged(const juce::String &parameterID, fl
                                                                                         parameterSettings.highShelfQ,
                                                                                         juce::Decibels::decibelsToGain(parameterSettings.highShelfGain));
         
-        if (!parameterSettings.highShelfBypass)
-        {
-            leftChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
-            rightChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
-        }
-        else
-        {
-            leftChain.get<ChainFilters::HighShelf>().coefficients = initialCoefficients;
-            rightChain.get<ChainFilters::HighShelf>().coefficients = initialCoefficients;
-        }
+        leftChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
+        rightChain.get<ChainFilters::HighShelf>().coefficients = highShelfCoefficients;
         
         leftChain.setBypassed<ChainFilters::HighShelf>(parameterSettings.highShelfBypass);
         rightChain.setBypassed<ChainFilters::HighShelf>(parameterSettings.highShelfBypass);
@@ -496,36 +470,44 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
     
     auto parameterSettings = getParameterSettings(apvts);
     
-    switch (parameterSettings.lowCutSlope)
+    if (!parameterSettings.lowCutBypass)
     {
-        case Slope_48:
+        switch (parameterSettings.lowCutSlope)
+        {
+            case Slope_48:
                 coefficients.add(leftChain.get<0>().get<4>().coefficients);
-        case Slope_36:
+            case Slope_36:
                 coefficients.add(leftChain.get<0>().get<3>().coefficients);
-        case Slope_24:
+            case Slope_24:
                 coefficients.add(leftChain.get<0>().get<2>().coefficients);
-        case Slope_12:
+            case Slope_12:
                 coefficients.add(leftChain.get<0>().get<1>().coefficients);
-        case Slope_6:
+            case Slope_6:
                 coefficients.add(leftChain.get<0>().get<0>().coefficients);
+        }
     }
+    if (!parameterSettings.lowShelfBypass)
+        coefficients.add(leftChain.get<1>().coefficients);
+    if (!parameterSettings.peakBypass)
+        coefficients.add(leftChain.get<2>().coefficients);
+    if (!parameterSettings.highShelfBypass)
+        coefficients.add(leftChain.get<3>().coefficients);
     
-    coefficients.add(leftChain.get<1>().coefficients);
-    coefficients.add(leftChain.get<2>().coefficients);
-    coefficients.add(leftChain.get<3>().coefficients);
-    
-    switch (parameterSettings.highCutSlope)
+    if (!parameterSettings.highCutBypass)
     {
-        case Slope_48:
-            coefficients.add(leftChain.get<4>().get<4>().coefficients);
-        case Slope_36:
-            coefficients.add(leftChain.get<4>().get<3>().coefficients);
-        case Slope_24:
-            coefficients.add(leftChain.get<4>().get<2>().coefficients);
-        case Slope_12:
-            coefficients.add(leftChain.get<4>().get<1>().coefficients);
-        case Slope_6:
-            coefficients.add(leftChain.get<4>().get<0>().coefficients);
+        switch (parameterSettings.highCutSlope)
+        {
+            case Slope_48:
+                coefficients.add(leftChain.get<4>().get<4>().coefficients);
+            case Slope_36:
+                coefficients.add(leftChain.get<4>().get<3>().coefficients);
+            case Slope_24:
+                coefficients.add(leftChain.get<4>().get<2>().coefficients);
+            case Slope_12:
+                coefficients.add(leftChain.get<4>().get<1>().coefficients);
+            case Slope_6:
+                coefficients.add(leftChain.get<4>().get<0>().coefficients);
+        }
     }
     
     return coefficients;
@@ -555,54 +537,32 @@ void PaperEQAudioProcessor::updateLowCutFilter(ParameterSettings& parameterSetti
             break;
     }
     
-    leftChain.get<0>().setBypassed<0>(true);
-    leftChain.get<0>().setBypassed<1>(true);
-    leftChain.get<0>().setBypassed<2>(true);
-    leftChain.get<0>().setBypassed<3>(true);
-    leftChain.get<0>().setBypassed<4>(true);
-    
-    rightChain.get<0>().setBypassed<0>(true);
-    rightChain.get<0>().setBypassed<1>(true);
-    rightChain.get<0>().setBypassed<2>(true);
-    rightChain.get<0>().setBypassed<3>(true);
-    rightChain.get<0>().setBypassed<4>(true);
+    updateLowCutFilterCoefficients<3>(initialCoefficients);
+    updateLowCutFilterCoefficients<2>(initialCoefficients);
+    updateLowCutFilterCoefficients<1>(initialCoefficients);
+    updateLowCutFilterCoefficients<0>(initialCoefficients);
     
     switch (parameterSettings.lowCutSlope)
     {
         case Slope_48:
         {
-            if (!parameterSettings.lowCutBypass)
-                updateLowCutFilterCoefficients<3>(filterCoefficients[3]);
-            else
-                updateLowCutFilterCoefficients<3>(initialCoefficients);
+            updateLowCutFilterCoefficients<3>(filterCoefficients[3]);
         }
         case Slope_36:
         {
-            if (!parameterSettings.lowCutBypass)
-                updateLowCutFilterCoefficients<2>(filterCoefficients[2]);
-            else
-                updateLowCutFilterCoefficients<2>(initialCoefficients);
+            updateLowCutFilterCoefficients<2>(filterCoefficients[2]);
         }
         case Slope_24:
         {
-            if (!parameterSettings.lowCutBypass)
-                updateLowCutFilterCoefficients<1>(filterCoefficients[1]);
-            else
-                updateLowCutFilterCoefficients<1>(initialCoefficients);
+            updateLowCutFilterCoefficients<1>(filterCoefficients[1]);
         }
         case Slope_12:
         {
-            if (!parameterSettings.lowCutBypass)
-                updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
-            else
-                updateLowCutFilterCoefficients<0>(initialCoefficients);
+            updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
         }
         case Slope_6:
         {
-            if (!parameterSettings.lowCutBypass)
-                updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
-            else
-                updateLowCutFilterCoefficients<0>(initialCoefficients);
+            updateLowCutFilterCoefficients<0>(filterCoefficients[0]);
         }
     }
     
@@ -634,56 +594,32 @@ void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSett
             break;
     }
     
-    leftChain.get<4>().setBypassed<0>(true);
-    leftChain.get<4>().setBypassed<1>(true);
-    leftChain.get<4>().setBypassed<2>(true);
-    leftChain.get<4>().setBypassed<3>(true);
-    leftChain.get<4>().setBypassed<4>(true);
-    
-    rightChain.get<4>().setBypassed<0>(true);
-    rightChain.get<4>().setBypassed<1>(true);
-    rightChain.get<4>().setBypassed<2>(true);
-    rightChain.get<4>().setBypassed<3>(true);
-    rightChain.get<4>().setBypassed<4>(true);
+    updateHighCutFilterCoefficients<3>(initialCoefficients);
+    updateHighCutFilterCoefficients<2>(initialCoefficients);
+    updateHighCutFilterCoefficients<1>(initialCoefficients);
+    updateHighCutFilterCoefficients<0>(initialCoefficients);
     
     switch (parameterSettings.highCutSlope)
     {
         case Slope_48:
         {
-            if (!parameterSettings.highCutBypass)
-                updateHighCutFilterCoefficients<3>(filterCoefficients[3]);
-            else
-                updateHighCutFilterCoefficients<3>(initialCoefficients);
+            updateHighCutFilterCoefficients<3>(filterCoefficients[3]);
         }
         case Slope_36:
         {
-            if (!parameterSettings.highCutBypass)
-                updateHighCutFilterCoefficients<2>(filterCoefficients[2]);
-            else
-                updateHighCutFilterCoefficients<2>(initialCoefficients);
+            updateHighCutFilterCoefficients<2>(filterCoefficients[2]);
         }
         case Slope_24:
         {
-            if (!parameterSettings.highCutBypass)
-                updateHighCutFilterCoefficients<1>(filterCoefficients[1]);
-            else
-                updateHighCutFilterCoefficients<1>(initialCoefficients);
+            updateHighCutFilterCoefficients<1>(filterCoefficients[1]);
         }
         case Slope_12:
         {
-            if (!parameterSettings.highCutBypass)
-                updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
-            else
-                updateHighCutFilterCoefficients<0>(initialCoefficients);
+            updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
         }
         case Slope_6:
         {
-            if (!parameterSettings.highCutBypass)
-                updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
-            else
-                updateHighCutFilterCoefficients<0>(initialCoefficients);
-            
-            leftChain.get<4>().isBypassed<0>();
+            updateHighCutFilterCoefficients<0>(filterCoefficients[0]);
         }
     }
     
@@ -693,15 +629,43 @@ void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSett
 
 juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getLowCutCoefficients()
 {
+    auto parameterSettings = getParameterSettings(apvts);
+    
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
     
-    if (!leftChain.isBypassed<ChainFilters::LowCut>())
+    switch (parameterSettings.lowCutSlope)
     {
-        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<1>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<2>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<3>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<4>().coefficients);
+        case Slope_6:
+        {
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
+            break;
+        }
+        case Slope_12:
+        {
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
+            break;
+        }
+        case Slope_24:
+        {
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<1>().coefficients);
+            break;
+        }
+        case Slope_36:
+        {
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<1>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<2>().coefficients);
+            break;
+        }
+        case Slope_48:
+        {
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<1>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<2>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::LowCut>().get<3>().coefficients);
+            break;
+        }
     }
     
     return coefficients;
@@ -711,8 +675,7 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
 {
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
     
-    if (!leftChain.isBypassed<ChainFilters::LowShelf>())
-        coefficients.add(leftChain.get<ChainFilters::LowShelf>().coefficients);
+    coefficients.add(leftChain.get<ChainFilters::LowShelf>().coefficients);
     
     return coefficients;
 }
@@ -721,8 +684,7 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
 {
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
     
-    if (!leftChain.isBypassed<ChainFilters::Peak>())
-        coefficients.add(leftChain.get<ChainFilters::Peak>().coefficients);
+    coefficients.add(leftChain.get<ChainFilters::Peak>().coefficients);
     
     return coefficients;
 }
@@ -731,23 +693,50 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
 {
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
     
-    if (!leftChain.isBypassed<ChainFilters::HighShelf>())
-        coefficients.add(leftChain.get<ChainFilters::HighShelf>().coefficients);
+    coefficients.add(leftChain.get<ChainFilters::HighShelf>().coefficients);
     
     return coefficients;
 }
 
 juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getHighCutCoefficients()
 {
-    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    auto parameterSettings = getParameterSettings(apvts);
     
-    if (!leftChain.isBypassed<ChainFilters::HighCut>())
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+
+    switch (parameterSettings.highCutSlope)
     {
-        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<1>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<2>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<3>().coefficients);
-        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<4>().coefficients);
+        case Slope_6:
+        {
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
+            break;
+        }
+        case Slope_12:
+        {
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
+            break;
+        }
+        case Slope_24:
+        {
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<1>().coefficients);
+            break;
+        }
+        case Slope_36:
+        {
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<1>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<2>().coefficients);
+            break;
+        }
+        case Slope_48:
+        {
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<1>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<2>().coefficients);
+            coefficients.add(leftChain.get<ChainFilters::HighCut>().get<3>().coefficients);
+            break;
+        }
     }
     
     return coefficients;
