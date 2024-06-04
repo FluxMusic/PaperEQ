@@ -14,6 +14,8 @@
 #include "../PluginProcessor.h"
 #include "ResponseCurveComponent.h"
 #include "DragBandComponent.h"
+#include "0dBLine.h"
+#include "ResponseCurve.h"
 
 class ResponseCurveDisplay : public juce::Component
 {
@@ -31,4 +33,8 @@ private:
     DragBandComponent lowCutDragBand, lowShelfDragBand, peakDragBand, highShelfDragBand, highCutDragBand;
     
     ResponseCurveComponent responseCurveComponent;
+    
+    ZerodBLine zerodBLine;
+    
+    ResponseCurve responseCurve;
 };

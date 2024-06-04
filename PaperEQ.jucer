@@ -20,6 +20,7 @@
               file="Source/LookAndFeel/PaperLookAndFeel.h"/>
       </GROUP>
       <GROUP id="{DDBEAEB0-51B8-B27C-39EB-B82FA0E8E019}" name="Components">
+        <FILE id="OQc2yr" name="0dBLine.h" compile="0" resource="0" file="Source/Components/0dBLine.h"/>
         <FILE id="pDW6rh" name="DragBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/DragBandComponent.cpp"/>
         <FILE id="mtdG4A" name="DragBandComponent.h" compile="0" resource="0"
@@ -62,6 +63,9 @@
               file="Source/Components/PeakResetButton.cpp"/>
         <FILE id="IetICs" name="PeakResetButton.h" compile="0" resource="0"
               file="Source/Components/PeakResetButton.h"/>
+        <FILE id="TmkfLj" name="ResponseCurve.cpp" compile="1" resource="0"
+              file="Source/Components/ResponseCurve.cpp"/>
+        <FILE id="j3S8Ra" name="ResponseCurve.h" compile="0" resource="0" file="Source/Components/ResponseCurve.h"/>
         <FILE id="TAHYBg" name="ResponseCurveComponent.cpp" compile="1" resource="0"
               file="Source/Components/ResponseCurveComponent.cpp"/>
         <FILE id="DzS6Pz" name="ResponseCurveComponent.h" compile="0" resource="0"

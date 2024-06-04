@@ -17,7 +17,8 @@ lowShelfDragBand(p, 1, juce::Colours::orange.withSaturation(0.7f)),
 peakDragBand(p, 2, juce::Colours::limegreen.withSaturation(0.4f)),
 highShelfDragBand(p, 3, juce::Colours::cornflowerblue.withSaturation(0.5f)),
 highCutDragBand(p, 4, juce::Colours::blueviolet.withSaturation(0.5f)),
-responseCurveComponent(p)
+responseCurveComponent(p),
+responseCurve(p)
 {
     addAndMakeVisible(responseCurveComponent);
     
@@ -27,7 +28,9 @@ responseCurveComponent(p)
     addAndMakeVisible(highShelfDragBand);
     addAndMakeVisible(highCutDragBand);
     
-    responseCurveComponent.toBack();
+    addAndMakeVisible(zerodBLine);
+    
+    addAndMakeVisible(responseCurve);
 }
 
 void ResponseCurveDisplay::paint(juce::Graphics& g)
@@ -122,6 +125,9 @@ void ResponseCurveDisplay::resized()
     peakDragBand.setBounds(bounds);
     highShelfDragBand.setBounds(bounds);
     highCutDragBand.setBounds(bounds);
+    
+    zerodBLine.setBounds(bounds);
+    responseCurve.setBounds(bounds);
 }
 
 DragBandComponent& ResponseCurveDisplay::getDragBand(int dragBand)
