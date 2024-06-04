@@ -20,6 +20,10 @@
               file="Source/LookAndFeel/PaperLookAndFeel.h"/>
       </GROUP>
       <GROUP id="{DDBEAEB0-51B8-B27C-39EB-B82FA0E8E019}" name="Components">
+        <FILE id="pDW6rh" name="DragBandComponent.cpp" compile="1" resource="0"
+              file="Source/Components/DragBandComponent.cpp"/>
+        <FILE id="mtdG4A" name="DragBandComponent.h" compile="0" resource="0"
+              file="Source/Components/DragBandComponent.h"/>
         <FILE id="PlydTx" name="HighCutBandComponent.cpp" compile="1" resource="0"
               file="Source/Components/HighCutBandComponent.cpp"/>
         <FILE id="RqUNdP" name="HighCutBandComponent.h" compile="0" resource="0"

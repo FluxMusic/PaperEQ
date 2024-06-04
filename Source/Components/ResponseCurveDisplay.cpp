@@ -12,9 +12,22 @@
 
 ResponseCurveDisplay::ResponseCurveDisplay(PaperEQAudioProcessor& p)
 : audioProcessor(p),
+lowCutDragBand(p, 0, juce::Colours::red.withSaturation(0.5f)),
+lowShelfDragBand(p, 1, juce::Colours::orange.withSaturation(0.7f)),
+peakDragBand(p, 2, juce::Colours::limegreen.withSaturation(0.4f)),
+highShelfDragBand(p, 3, juce::Colours::cornflowerblue.withSaturation(0.5f)),
+highCutDragBand(p, 4, juce::Colours::blueviolet.withSaturation(0.5f)),
 responseCurveComponent(p)
 {
     addAndMakeVisible(responseCurveComponent);
+    
+    addAndMakeVisible(lowCutDragBand);
+    addAndMakeVisible(lowShelfDragBand);
+    addAndMakeVisible(peakDragBand);
+    addAndMakeVisible(highShelfDragBand);
+    addAndMakeVisible(highCutDragBand);
+    
+    responseCurveComponent.toBack();
 }
 
 void ResponseCurveDisplay::paint(juce::Graphics& g)
@@ -104,4 +117,31 @@ void ResponseCurveDisplay::resized()
     bounds.removeFromBottom(bounds.getHeight() / 15);
     
     responseCurveComponent.setBounds(bounds);
+    lowCutDragBand.setBounds(bounds);
+    lowShelfDragBand.setBounds(bounds);
+    peakDragBand.setBounds(bounds);
+    highShelfDragBand.setBounds(bounds);
+    highCutDragBand.setBounds(bounds);
+}
+
+DragBandComponent& ResponseCurveDisplay::getDragBand(int dragBand)
+{
+    switch (dragBand)
+    {
+        case 0:
+            return lowCutDragBand;
+            break;
+        case 1:
+            return lowShelfDragBand;
+            break;
+        case 2:
+            return peakDragBand;
+            break;
+        case 3:
+            return highShelfDragBand;
+            break;
+        default:
+            return highCutDragBand;
+            break;
+    }
 }

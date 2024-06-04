@@ -20,14 +20,18 @@ class HighCutBandComponent : public juce::Component
 public:
     HighCutBandComponent(PaperEQAudioProcessor&);
     
+    PaperKnob& getFreqSlider() { return freqSlider; }
+    PaperKnob& getSlopeSlider() { return slopeSlider; }
+    
 private:
     void paint (juce::Graphics& g) override;
     void resized() override;
     
     PaperEQAudioProcessor& audioProcessor;
     
-    PaperBypass bypassButton {"Bypass"};
     PaperKnob freqSlider, slopeSlider;
+    
+    PaperBypass bypassButton {"Bypass"};
     juce::AudioProcessorValueTreeState::SliderAttachment freqSliderAttachment, slopeSliderAttachment;
     juce::AudioProcessorValueTreeState::ButtonAttachment bypassButtonAttachment;
 };

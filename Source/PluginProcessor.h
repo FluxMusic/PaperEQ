@@ -95,6 +95,12 @@ public:
     
     juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getCoefficients();
     
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getLowCutCoefficients();
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getLowShelfCoefficients();
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getPeakCoefficients();
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getHighShelfCoefficients();
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> getHighCutCoefficients();
+    
     template <int chainSegment>
     void setChainSegmentBypass(bool bypassed)
     {

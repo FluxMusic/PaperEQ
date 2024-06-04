@@ -20,14 +20,19 @@ class LowShelfBandComponent : public juce::Component
 public:
     LowShelfBandComponent(PaperEQAudioProcessor&);
     
+    PaperKnob& getFreqSlider() { return freqSlider; }
+    PaperKnob& getGainSlider() { return gainSlider; }
+    PaperKnob& getQSlider() { return qSlider; }
+    
 private:
     void paint (juce::Graphics& g) override;
     void resized() override;
     
     PaperEQAudioProcessor& audioProcessor;
     
-    PaperBypass bypassButton {"Bypass"};
     PaperKnob gainSlider, freqSlider, qSlider;
+    
+    PaperBypass bypassButton {"Bypass"};
     juce::AudioProcessorValueTreeState::SliderAttachment gainSliderAttachment, freqSliderAttachment, qSliderAttachment;
     juce::AudioProcessorValueTreeState::ButtonAttachment bypassButtonAttachment;
 };

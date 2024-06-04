@@ -499,30 +499,15 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
     switch (parameterSettings.lowCutSlope)
     {
         case Slope_48:
-        {
-            if (!leftChain.get<0>().isBypassed<4>())
                 coefficients.add(leftChain.get<0>().get<4>().coefficients);
-        }
         case Slope_36:
-        {
-            if (!leftChain.get<0>().isBypassed<3>())
                 coefficients.add(leftChain.get<0>().get<3>().coefficients);
-        }
         case Slope_24:
-        {
-            if (!leftChain.get<0>().isBypassed<2>())
                 coefficients.add(leftChain.get<0>().get<2>().coefficients);
-        }
         case Slope_12:
-        {
-            if (!leftChain.get<0>().isBypassed<1>())
                 coefficients.add(leftChain.get<0>().get<1>().coefficients);
-        }
         case Slope_6:
-        {
-            if (!leftChain.get<0>().isBypassed<0>())
                 coefficients.add(leftChain.get<0>().get<0>().coefficients);
-        }
     }
     
     coefficients.add(leftChain.get<1>().coefficients);
@@ -532,30 +517,15 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
     switch (parameterSettings.highCutSlope)
     {
         case Slope_48:
-        {
-            if (!leftChain.get<4>().isBypassed<4>())
             coefficients.add(leftChain.get<4>().get<4>().coefficients);
-        }
         case Slope_36:
-        {
-            if (!leftChain.get<4>().isBypassed<3>())
             coefficients.add(leftChain.get<4>().get<3>().coefficients);
-        }
         case Slope_24:
-        {
-            if (!leftChain.get<4>().isBypassed<2>())
             coefficients.add(leftChain.get<4>().get<2>().coefficients);
-        }
         case Slope_12:
-        {
-            if (!leftChain.get<4>().isBypassed<1>())
             coefficients.add(leftChain.get<4>().get<1>().coefficients);
-        }
         case Slope_6:
-        {
-            if (!leftChain.get<4>().isBypassed<0>())
             coefficients.add(leftChain.get<4>().get<0>().coefficients);
-        }
     }
     
     return coefficients;
@@ -719,6 +689,68 @@ void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSett
     
     leftChain.setBypassed<ChainFilters::HighCut>(parameterSettings.highCutBypass);
     rightChain.setBypassed<ChainFilters::HighCut>(parameterSettings.highCutBypass);
+}
+
+juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getLowCutCoefficients()
+{
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    
+    if (!leftChain.isBypassed<ChainFilters::LowCut>())
+    {
+        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<0>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<1>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<2>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<3>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::LowCut>().get<4>().coefficients);
+    }
+    
+    return coefficients;
+}
+
+juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getLowShelfCoefficients()
+{
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    
+    if (!leftChain.isBypassed<ChainFilters::LowShelf>())
+        coefficients.add(leftChain.get<ChainFilters::LowShelf>().coefficients);
+    
+    return coefficients;
+}
+
+juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getPeakCoefficients()
+{
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    
+    if (!leftChain.isBypassed<ChainFilters::Peak>())
+        coefficients.add(leftChain.get<ChainFilters::Peak>().coefficients);
+    
+    return coefficients;
+}
+
+juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getHighShelfCoefficients()
+{
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    
+    if (!leftChain.isBypassed<ChainFilters::HighShelf>())
+        coefficients.add(leftChain.get<ChainFilters::HighShelf>().coefficients);
+    
+    return coefficients;
+}
+
+juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcessor::getHighCutCoefficients()
+{
+    juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> coefficients;
+    
+    if (!leftChain.isBypassed<ChainFilters::HighCut>())
+    {
+        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<0>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<1>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<2>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<3>().coefficients);
+        coefficients.add(leftChain.get<ChainFilters::HighCut>().get<4>().coefficients);
+    }
+    
+    return coefficients;
 }
 
 template <int filterSegment, typename CoefficientType>

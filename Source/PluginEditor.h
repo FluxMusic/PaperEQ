@@ -17,6 +17,7 @@
 #include "Components/HighShelfBandComponent.h"
 #include "Components/HighCutBandComponent.h"
 #include "Components/OutputComponent.h"
+#include "Components/DragBandComponent.h"
 
 //==============================================================================
 /**

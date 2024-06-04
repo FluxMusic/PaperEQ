@@ -30,6 +30,24 @@ output(p)
     addAndMakeVisible(highShelfBand);
     addAndMakeVisible(highCutBand);
     
+    responseCurveDisplay.getDragBand(0).registerSlider(&lowCutBand.getFreqSlider(), DragBandComponent::Axis::X);
+    responseCurveDisplay.getDragBand(0).registerSlider(&lowCutBand.getSlopeSlider(), DragBandComponent::Axis::Z);
+    
+    responseCurveDisplay.getDragBand(1).registerSlider(&lowShelfBand.getFreqSlider(), DragBandComponent::Axis::X);
+    responseCurveDisplay.getDragBand(1).registerSlider(&lowShelfBand.getGainSlider(), DragBandComponent::Axis::Y);
+    responseCurveDisplay.getDragBand(1).registerSlider(&lowShelfBand.getQSlider(), DragBandComponent::Axis::Z);
+    
+    responseCurveDisplay.getDragBand(2).registerSlider(&peakBand.getFreqSlider(), DragBandComponent::Axis::X);
+    responseCurveDisplay.getDragBand(2).registerSlider(&peakBand.getGainSlider(), DragBandComponent::Axis::Y);
+    responseCurveDisplay.getDragBand(2).registerSlider(&peakBand.getQSlider(), DragBandComponent::Axis::Z);
+    
+    responseCurveDisplay.getDragBand(3).registerSlider(&highShelfBand.getFreqSlider(), DragBandComponent::Axis::X);
+    responseCurveDisplay.getDragBand(3).registerSlider(&highShelfBand.getGainSlider(), DragBandComponent::Axis::Y);
+    responseCurveDisplay.getDragBand(3).registerSlider(&highShelfBand.getQSlider(), DragBandComponent::Axis::Z);
+    
+    responseCurveDisplay.getDragBand(4).registerSlider(&highCutBand.getFreqSlider(), DragBandComponent::Axis::X);
+    responseCurveDisplay.getDragBand(4).registerSlider(&highCutBand.getSlopeSlider(), DragBandComponent::Axis::Z);
+    
     addAndMakeVisible(output);
     
     setSize (800, 450);
@@ -40,6 +58,23 @@ output(p)
 
 PaperEQAudioProcessorEditor::~PaperEQAudioProcessorEditor()
 {
+    responseCurveDisplay.getDragBand(0).deregisterSlider(&lowCutBand.getFreqSlider());
+    responseCurveDisplay.getDragBand(0).deregisterSlider(&lowCutBand.getSlopeSlider());
+    
+    responseCurveDisplay.getDragBand(1).deregisterSlider(&lowShelfBand.getFreqSlider());
+    responseCurveDisplay.getDragBand(1).deregisterSlider(&lowShelfBand.getGainSlider());
+    responseCurveDisplay.getDragBand(1).deregisterSlider(&lowShelfBand.getQSlider());
+    
+    responseCurveDisplay.getDragBand(2).deregisterSlider(&peakBand.getFreqSlider());
+    responseCurveDisplay.getDragBand(2).deregisterSlider(&peakBand.getGainSlider());
+    responseCurveDisplay.getDragBand(2).deregisterSlider(&peakBand.getQSlider());
+    
+    responseCurveDisplay.getDragBand(3).deregisterSlider(&highShelfBand.getFreqSlider());
+    responseCurveDisplay.getDragBand(3).deregisterSlider(&highShelfBand.getGainSlider());
+    responseCurveDisplay.getDragBand(3).deregisterSlider(&highShelfBand.getQSlider());
+    
+    responseCurveDisplay.getDragBand(4).deregisterSlider(&highCutBand.getFreqSlider());
+    responseCurveDisplay.getDragBand(4).deregisterSlider(&highCutBand.getSlopeSlider());
 }
 
 //==============================================================================
