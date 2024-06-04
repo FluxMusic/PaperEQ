@@ -72,10 +72,10 @@ thumb(color)
                                                             0.0,
                                                             bounds.getHeight() - width,
                                                             slider->getMaximum(),
-                                                            slider->getMinimum())), 
+                                                            slider->getMinimum())),
                              juce::NotificationType::sendNotification);
         }
-    };  
+    };
     thumb.wheelCallback = [&](juce::MouseWheelDetails wheel)
     {
         for (auto* slider : zSliders)
@@ -88,7 +88,6 @@ thumb(color)
 void DragBandComponent::registerSlider(juce::Slider* slider, Axis axis)
 {
     slider->addListener(this);
-    
     if (axis == Axis::X)
         xSliders.push_back(slider);
     if (axis == Axis::Y)
@@ -100,7 +99,6 @@ void DragBandComponent::registerSlider(juce::Slider* slider, Axis axis)
 void DragBandComponent::deregisterSlider(juce::Slider *slider)
 {
     slider->removeListener(this);
-    
     xSliders.erase(std::remove(xSliders.begin(), xSliders.end(), slider), xSliders.end());
     ySliders.erase(std::remove(ySliders.begin(), ySliders.end(), slider), ySliders.end());
     zSliders.erase(std::remove(zSliders.begin(), zSliders.end(), slider), zSliders.end());
@@ -166,29 +164,7 @@ void DragBandComponent::paint(juce::Graphics &g)
         lineMagnitudes[i] = juce::Decibels::gainToDecibels(lineMagnitude);
     }
     
-//    std::vector<float> fillMagnitudes;
-//        
-//    fillMagnitudes.resize(width);
-//    
-//    for (int i = 0; i <= width; ++i)
-//    {
-//        float fillMagnitude = 1.f;
-//        
-//        auto freq = juce::mapToLog10(static_cast<float>(i) / width, 20.f, 20000.f);
-//        
-//        for (auto coefficient : coefficients)
-//        {
-//            fillMagnitude *= coefficient->getMagnitudeForFrequency(freq, sampleRate);
-//        }
-//        
-//        if (i == 0 || i == width - 1)
-//            fillMagnitude *= 0;
-//        
-//        fillMagnitudes[i] = juce::Decibels::gainToDecibels(fillMagnitude);
-//    }
-    
     juce::Path responseCurve;
-//    juce::Path responseCurveFill;
     
     auto map = [top, bottom] (float magnitude)
     {
@@ -196,34 +172,23 @@ void DragBandComponent::paint(juce::Graphics &g)
     };
     
     responseCurve.startNewSubPath(left, map(lineMagnitudes.front()));
-//    responseCurveFill.startNewSubPath(left, map(fillMagnitudes.front()));
     
     for (size_t i = 1; i < lineMagnitudes.size(); ++i)
     {
         responseCurve.lineTo(left + i, map(lineMagnitudes[i]));
     }
-//    for (size_t i = 0; i < fillMagnitudes.size(); ++i)
-//    {
-//        responseCurveFill.lineTo(left + i, map(fillMagnitudes[i]));
-//    }
     
     g.setColour(color);
-    g.strokePath(responseCurve, juce::PathStrokeType( bottom / 200 ));
-//    g.setColour(color.withAlpha(0.3f));
-//    g.fillPath(responseCurveFill);
+    g.strokePath(responseCurve, juce::PathStrokeType(1.f));
 }
 
 void DragBandComponent::resized()
 {
     thumb.setBounds(getLocalBounds().withSizeKeepingCentre(thumbSize, thumbSize));
     if (!xSliders.empty())
-    {
         sliderValueChanged(xSliders[0]);
-    }
     if (!ySliders.empty())
-    {
-        sliderValueChanged(xSliders[0]);
-    }
+        sliderValueChanged(ySliders[0]);
 }
 
 juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> DragBandComponent::updateCoefficients(int band)
