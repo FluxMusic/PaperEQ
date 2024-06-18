@@ -49,7 +49,12 @@ void PeakBandComponent::paint(juce::Graphics& g)
     
     bypassButton.getToggleState() ? g.setColour(juce::Colours::floralwhite) : g.setColour(juce::Colours::black);
     
-    g.drawFittedText("P", textBounds, juce::Justification::right, 1);
+    if (const auto svg = juce::XmlDocument::parse(BinaryData::IconPeak_svg))
+    {
+        const auto drawable = juce::Drawable::createFromSVG(*svg);
+        drawable->setTransformToFit(textBounds.reduced(textBounds.getHeight() / 8).toFloat(), juce::RectanglePlacement::xRight);
+        drawable->draw(g, 1.f);
+    }
 }
 
 void PeakBandComponent::resized()
