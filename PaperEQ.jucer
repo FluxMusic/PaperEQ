@@ -5,6 +5,13 @@
   <MAINGROUP id="bgqB2g" name="PaperEQ">
     <GROUP id="{8E9F2B74-AAC8-6912-8E13-D0ED733D1F26}" name="Source">
       <GROUP id="{50ED0445-EC29-9DFC-CE2F-8155AE892CC5}" name="Assets">
+        <FILE id="qDDSZT" name="IconHighCut.svg" compile="0" resource="1" file="Source/Assets/IconHighCut.svg"/>
+        <FILE id="tCICS9" name="IconHighShelf.svg" compile="0" resource="1"
+              file="Source/Assets/IconHighShelf.svg"/>
+        <FILE id="YxFt25" name="IconLowCut.svg" compile="0" resource="1" file="Source/Assets/IconLowCut.svg"/>
+        <FILE id="DDVqbk" name="IconLowShelf.svg" compile="0" resource="1"
+              file="Source/Assets/IconLowShelf.svg"/>
+        <FILE id="IpslRd" name="IconPeak.svg" compile="0" resource="1" file="Source/Assets/IconPeak.svg"/>
         <FILE id="Vi3BfQ" name="Knob.svg" compile="0" resource="1" file="Source/Assets/Knob.svg"/>
         <FILE id="EnE6W2" name="OutputGainSlider1.svg" compile="0" resource="1"
               file="Source/Assets/OutputGainSlider1.svg"/>

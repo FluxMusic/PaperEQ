@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1920.00" height="1080.00" viewBox="0.00 0.00 1920.00 1080.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g stroke-linecap="round" id="high_shelf">
+<path d="M414.25,165.75 Q400.00,165.00 397.38,163.25 Q394.75,161.50 393.25,157.62 Q391.75,153.75 391.25,155.25" fill="none" stroke="rgb(0, 0, 0)" stroke-width="4.00" stroke-opacity="1.00" stroke-linejoin="miter"/>
+<path d="M414.25,141.25 Q400.00,142.00 397.38,143.75 Q394.75,145.50 393.25,149.38 Q391.75,153.25 391.25,151.75" fill="none" stroke="rgb(0, 0, 0)" stroke-width="4.00" stroke-opacity="1.00" stroke-linejoin="miter"/>
+<path d="M392.25,153.50 L375.00,153.75" fill="none" stroke="rgb(0, 0, 0)" stroke-width="4.00" stroke-opacity="1.00" stroke-linejoin="round"/>
+</g>
+</svg>
