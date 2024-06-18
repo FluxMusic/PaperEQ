@@ -24,6 +24,11 @@ bypassButtonAttachment(audioProcessor.getAPVTS(), "PeakBypass", bypassButton)
     addAndMakeVisible(gainSlider);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(qSlider);
+    
+    bypassButton.onClick = [this]()
+    {
+        repaint();
+    };
 }
 
 void PeakBandComponent::paint(juce::Graphics& g)

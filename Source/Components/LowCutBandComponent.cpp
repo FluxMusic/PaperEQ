@@ -21,6 +21,11 @@ bypassButtonAttachment(audioProcessor.getAPVTS(), "LowCutBypass", bypassButton)
     addAndMakeVisible(bypassButton);
     addAndMakeVisible(freqSlider);
     addAndMakeVisible(slopeSlider);
+    
+    bypassButton.onClick = [this]()
+    {
+        repaint();
+    };
 }
 
 void LowCutBandComponent::paint(juce::Graphics& g)
