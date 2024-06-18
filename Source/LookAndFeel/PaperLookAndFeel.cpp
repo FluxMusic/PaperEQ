@@ -64,7 +64,7 @@ void PaperLookAndFeel::drawLinearSlider(juce::Graphics& g,
     knobBounds.setX(bounds.getCentreX() - size / 2);
     knobBounds.setY(sliderPos - (size * 1.5) / 2);
     
-    if (const auto slider = juce::XmlDocument::parse(BinaryData::OutputGainSlider1_svg))
+    if (const auto slider = juce::XmlDocument::parse(BinaryData::OutputGainSlider_svg))
     {
         const auto drawable = juce::Drawable::createFromSVG(*slider);
         drawable->setTransformToFit(bounds.toFloat(), juce::RectanglePlacement::stretchToFit);
