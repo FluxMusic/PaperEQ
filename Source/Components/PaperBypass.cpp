@@ -30,5 +30,8 @@ void PaperBypass::paint(juce::Graphics& g)
                                           false);
     
     this->getToggleState() ? g.setColour(juce::Colours::floralwhite) : g.setColour(juce::Colours::black);
+    
+    const auto textHeight = getLocalBounds().getHeight() / 1.5;
+    g.setFont(textHeight);
     g.drawFittedText(text, getLocalBounds(), juce::Justification::centred, 1);
 }
