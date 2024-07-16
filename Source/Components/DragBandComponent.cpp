@@ -75,6 +75,7 @@ thumb(color)
                                                             slider->getMinimum())),
                              juce::NotificationType::sendNotification);
         }
+        repaint();
     };
     thumb.wheelCallback = [&](juce::MouseWheelDetails wheel)
     {
@@ -82,6 +83,7 @@ thumb(color)
         {
             slider->setValue(slider->getValue() + wheel.deltaY * 5);
         }
+        repaint();
     };
 }
 
