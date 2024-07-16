@@ -118,11 +118,11 @@ void DragBandComponent::sliderValueChanged(juce::Slider* slider)
     if (isXAxisSlider)
     {
         thumb.setTopLeftPosition(juce::jmap(
-                                            juce::mapFromLog10(slider->getValue(), static_cast<double>(10.f), static_cast<double>(20000.f)),
-                                            juce::mapFromLog10(slider->getMinimum(), static_cast<double>(10.f), static_cast<double>(20000.f)),
-                                            juce::mapFromLog10(slider->getMaximum(), static_cast<double>(10.f), static_cast<double>(20000.f)),
+                                            juce::mapFromLog10(slider->getValue(), static_cast<double>(20.f), static_cast<double>(20000.f)),
+                                            juce::mapFromLog10(slider->getMinimum(), static_cast<double>(20.f), static_cast<double>(20000.f)),
+                                            juce::mapFromLog10(slider->getMaximum(), static_cast<double>(20.f), static_cast<double>(20000.f)),
                                             0.0,
-                                            bounds.getWidth() - width),
+                                            bounds.getWidth()),
                                  thumb.getY());
     }
     else if (isYAxisSlider)
@@ -132,7 +132,7 @@ void DragBandComponent::sliderValueChanged(juce::Slider* slider)
                                                           slider->getMaximum(),
                                                           slider->getMinimum(),
                                                           0.0,
-                                                          bounds.getHeight() - width));
+                                                          bounds.getHeight()));
     }
     repaint();
 }
