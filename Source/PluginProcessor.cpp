@@ -743,13 +743,15 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
 }
 
 template <int filterSegment, typename CoefficientType>
-void PaperEQAudioProcessor::updateLowCutFilterCoefficients(const CoefficientType& newCoefficients)
+PaperEQAudioProcessor& PaperEQAudioProcessor::updateLowCutFilterCoefficients(const CoefficientType& newCoefficients)
 {
     leftChain.get<0>().setBypassed<filterSegment>(false);
     rightChain.get<0>().setBypassed<filterSegment>(false);
     
     leftChain.get<0>().get<filterSegment>().coefficients = newCoefficients;
     rightChain.get<0>().get<filterSegment>().coefficients = newCoefficients;
+    
+    return *this;
 }
 
 template <int filterSegment, typename CoefficientType>

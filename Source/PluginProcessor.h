@@ -127,8 +127,10 @@ private:
     
     juce::dsp::Gain<float> outputGain;
     
-    juce::LinearSmoothedValue<float> inputLevelL, inputLevelR;
+    juce::LinearSmoothedValue<float> inputLevelL{{}}, inputLevelR;
     juce::LinearSmoothedValue<float> outputLevelL, outputLevelR;
+
+    const int CHANNEL_ONE = 0;
     
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
@@ -138,7 +140,7 @@ private:
     void updateHighCutFilter(ParameterSettings& parameterSettings, double sampleRate);
     
     template <int filterSegment, typename CoefficientType>
-    void updateLowCutFilterCoefficients(const CoefficientType& newCoefficients);
+    PaperEQAudioProcessor& updateLowCutFilterCoefficients(const CoefficientType& newCoefficients);
     
     template <int filterSegment, typename CoefficientType>
     void updateHighCutFilterCoefficients(const CoefficientType& newCoefficients);
