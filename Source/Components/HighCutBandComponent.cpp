@@ -9,6 +9,7 @@
 */
 
 #include "HighCutBandComponent.h"
+#include "../PluginEditor.h"
 
 HighCutBandComponent::HighCutBandComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
@@ -25,6 +26,8 @@ bypassButtonAttachment(audioProcessor.getAPVTS(), "HighCutBypass", bypassButton)
     bypassButton.onClick = [this]()
     {
         repaint();
+        if (dynamic_cast<PaperEQAudioProcessorEditor*>(getParentComponent()))
+            dynamic_cast<PaperEQAudioProcessorEditor*>(getParentComponent())->getResponseCurveDisplay().getDragBand(4).repaint();
     };
 }
 
