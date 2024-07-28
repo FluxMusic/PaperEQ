@@ -152,7 +152,7 @@ void DragBandComponent::paint(juce::Graphics &g)
     std::vector<float> lineMagnitudes;
     lineMagnitudes.resize(width);
     
-    for (int i = 0; i <= width; ++i)
+    for (int i = 0; i < width; ++i)
     {
         float lineMagnitude = 1.f;
         

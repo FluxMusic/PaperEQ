@@ -9,6 +9,7 @@
 */
 
 #include "HighShelfBandComponent.h"
+#include "../PluginEditor.h"
 
 HighShelfBandComponent::HighShelfBandComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
@@ -28,6 +29,8 @@ bypassButtonAttachment(audioProcessor.getAPVTS(), "HighShelfBypass", bypassButto
     bypassButton.onClick = [this]()
     {
         repaint();
+        if (dynamic_cast<PaperEQAudioProcessorEditor*>(getParentComponent()))
+            dynamic_cast<PaperEQAudioProcessorEditor*>(getParentComponent())->getResponseCurveDisplay().getDragBand(3).repaint();
     };
 }
 

@@ -9,6 +9,7 @@
 */
 
 #include "PeakBandComponent.h"
+#include "../PluginEditor.h"
 
 PeakBandComponent::PeakBandComponent(PaperEQAudioProcessor& p)
 : audioProcessor(p),
@@ -28,6 +29,8 @@ bypassButtonAttachment(audioProcessor.getAPVTS(), "PeakBypass", bypassButton)
     bypassButton.onClick = [this]()
     {
         repaint();
+        if (dynamic_cast<PaperEQAudioProcessorEditor*>(getParentComponent()))
+            dynamic_cast<PaperEQAudioProcessorEditor*>(getParentComponent())->getResponseCurveDisplay().getDragBand(2).repaint();
     };
 }
 

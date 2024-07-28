@@ -33,7 +33,7 @@ void ResponseCurve::paint(juce::Graphics &g)
     
     const auto coefficients = audioProcessor.getCoefficients();
     
-    for (int i = 0; i <= width; ++i)
+    for (int i = 0; i < width; ++i)
     {
         float lineMagnitude = 1.f;
         
@@ -51,7 +51,7 @@ void ResponseCurve::paint(juce::Graphics &g)
         
     fillMagnitudes.resize(width);
     
-    for (int i = 0; i <= width; ++i)
+    for (int i = 0; i < width; ++i)
     {
         float fillMagnitude = 1.f;
         
