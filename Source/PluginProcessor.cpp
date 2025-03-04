@@ -542,6 +542,15 @@ void PaperEQAudioProcessor::updateLowCutFilter(ParameterSettings& parameterSetti
     updateLowCutFilterCoefficients<1>(initialCoefficients);
     updateLowCutFilterCoefficients<0>(initialCoefficients);
     
+    leftChain.get<0>().setBypassed<3>(true);
+    leftChain.get<0>().setBypassed<2>(true);
+    leftChain.get<0>().setBypassed<1>(true);
+    leftChain.get<0>().setBypassed<0>(true);
+    rightChain.get<0>().setBypassed<3>(true);
+    rightChain.get<0>().setBypassed<2>(true);
+    rightChain.get<0>().setBypassed<1>(true);
+    rightChain.get<0>().setBypassed<0>(true);
+    
     switch (parameterSettings.lowCutSlope)
     {
         case Slope_48:
@@ -598,6 +607,15 @@ void PaperEQAudioProcessor::updateHighCutFilter(ParameterSettings& parameterSett
     updateHighCutFilterCoefficients<2>(initialCoefficients);
     updateHighCutFilterCoefficients<1>(initialCoefficients);
     updateHighCutFilterCoefficients<0>(initialCoefficients);
+    
+    leftChain.get<4>().setBypassed<3>(true);
+    leftChain.get<4>().setBypassed<2>(true);
+    leftChain.get<4>().setBypassed<1>(true);
+    leftChain.get<4>().setBypassed<0>(true);
+    rightChain.get<4>().setBypassed<3>(true);
+    rightChain.get<4>().setBypassed<2>(true);
+    rightChain.get<4>().setBypassed<1>(true);
+    rightChain.get<4>().setBypassed<0>(true);
     
     switch (parameterSettings.highCutSlope)
     {
@@ -745,11 +763,11 @@ juce::Array<juce::dsp::IIR::Filter<float>::CoefficientsPtr> PaperEQAudioProcesso
 template <int filterSegment, typename CoefficientType>
 PaperEQAudioProcessor& PaperEQAudioProcessor::updateLowCutFilterCoefficients(const CoefficientType& newCoefficients)
 {
-    leftChain.get<0>().setBypassed<filterSegment>(false);
-    rightChain.get<0>().setBypassed<filterSegment>(false);
-    
     leftChain.get<0>().get<filterSegment>().coefficients = newCoefficients;
     rightChain.get<0>().get<filterSegment>().coefficients = newCoefficients;
+    
+    leftChain.get<0>().setBypassed<filterSegment>(false);
+    rightChain.get<0>().setBypassed<filterSegment>(false);
     
     return *this;
 }
@@ -757,9 +775,9 @@ PaperEQAudioProcessor& PaperEQAudioProcessor::updateLowCutFilterCoefficients(con
 template <int filterSegment, typename CoefficientType>
 void PaperEQAudioProcessor::updateHighCutFilterCoefficients(const CoefficientType& newCoefficients)
 {
-    leftChain.get<4>().setBypassed<filterSegment>(false);
-    rightChain.get<4>().setBypassed<filterSegment>(false);
-    
     leftChain.get<4>().get<filterSegment>().coefficients = newCoefficients;
     rightChain.get<4>().get<filterSegment>().coefficients = newCoefficients;
+    
+    leftChain.get<4>().setBypassed<filterSegment>(false);
+    rightChain.get<4>().setBypassed<filterSegment>(false);
 }

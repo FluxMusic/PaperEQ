@@ -21,7 +21,7 @@ void SingleMeter::paint(juce::Graphics &g)
     g.fillRoundedRectangle(bounds, 5.f);
     
     g.setGradientFill(juce::ColourGradient{juce::Colours::black.withAlpha(0.3f), bounds.getWidth() / 2, bounds.getBottom(), juce::Colours::black.withAlpha(0.8f), bounds.getWidth() / 2, bounds.getY(), false});
-    auto fill = juce::jmap(level, -60.f, 0.f, bounds.getY(), bounds.getBottom());
+    auto fill = juce::jmap(level, -100.f, 0.f, bounds.getY(), bounds.getBottom());
     g.fillRoundedRectangle(bounds.removeFromBottom(fill), 5.f);
 }
 
